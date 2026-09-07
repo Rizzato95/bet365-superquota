@@ -1,38 +1,33 @@
 # Superquota Tracker
 
-Web app Nuxt 4 per consultare lo storico delle superquote, analizzare il rendimento e simulare una puntata fissa.
+[Superquota Tracker](https://bet365-superquota.netlify.app) è una web app che raccoglie e analizza lo storico delle superquote. Permette di consultare i risultati delle scommesse, osservarne l’andamento nel tempo e simulare il rendimento con una puntata fissa.
 
-## Pagine
+Il progetto è indipendente e non è affiliato a bet365.
 
-- **Panoramica** (`/`)
-- **Simulatore** (`/simulator`)
-- **Archivio** (`/archive`)
-- **Gestione** (`/management`, riservata all’amministratore)
+## Cosa puoi fare
 
-## Configurazione locale
+- **Panoramica** — visualizza utile netto, ROI, percentuale di vittorie, andamento cumulativo e risultati mensili.
+- **Simulatore** — applica un importo fisso a tutte le scommesse di un periodo per stimare puntato, incassi e utile storico.
+- **Archivio** — cerca e filtra le superquote per data, sport ed esito.
+- **Gestione** — area riservata all’amministratore per inserire, modificare, rimuovere e ripristinare le scommesse.
 
-Copia `.env.example` in `.env` e imposta:
+## Come vengono calcolati i risultati
 
-```env
-NUXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
-NUXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable-key>
-NUXT_PUBLIC_SITE_URL=http://localhost:3000
-```
+La simulazione non reinveste gli incassi: applica lo stesso importo a ogni scommessa selezionata.
 
-L’app usa sempre Supabase. In assenza delle credenziali, le API restituiscono un errore di configurazione invece di mostrare dati locali.
+| Esito      | Incasso                    | Utile netto       |
+| ---------- | -------------------------- | ----------------- |
+| Vinta      | Puntata × quota maggiorata | Incasso − puntata |
+| Persa      | 0 €                        | − puntata         |
+| Rimborsata | Puntata                    | 0 €               |
+| In attesa  | Non conteggiata            | Non conteggiata   |
 
-```bash
-npm install
-npm run dev
-```
+Ogni incasso viene arrotondato ai centesimi prima del totale. ROI e percentuale di vittorie considerano soltanto le scommesse vinte o perse.
 
-## Verifiche
+## Dati e accesso
 
-```bash
-npm run typecheck
-npm test
-```
+Le informazioni pubblicate descrivono lo storico delle superquote registrate nel progetto. La gestione dei dati richiede un account amministratore; il sito non consente di piazzare scommesse e non gestisce denaro.
 
-## Deploy
+## Contatti
 
-Netlify richiede le stesse variabili pubbliche e `NUXT_PUBLIC_SITE_URL` deve coincidere con il dominio HTTPS dell’app.
+Progetto di [Marco Rizzato](https://www.marcorizzato.it)
