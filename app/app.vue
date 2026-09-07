@@ -101,7 +101,7 @@ useHead({
           class="block border-t border-t-[#2a362d] mt-6.5 pt-5 text-xs leading-relaxed text-muted"
           >© 2026
           <a
-            class="text-mint hover:underline"
+            class="text-mint underline underline-offset-2 hover:text-foreground"
             :href="config.owner.website"
             target="_blank"
             rel="noreferrer"
@@ -121,7 +121,7 @@ useHead({
         <span
           >© 2026
           <a
-            class="text-mint hover:underline"
+            class="text-mint underline underline-offset-2 hover:text-foreground"
             :href="config.owner.website"
             target="_blank"
             rel="noreferrer"

@@ -41,6 +41,10 @@
   --color-stat-note: #7d9484;
   --color-lime-hover: #edf7a7;
   --color-lime-action: #dce982;
+  --color-outcome-won: #274c36;
+  --color-outcome-lost: #493130;
+  --color-outcome-pending: #49452c;
+  --color-outcome-void: #293d48;
   --background-image-header-gradient: linear-gradient(
     110deg,
     #174b3a 0%,

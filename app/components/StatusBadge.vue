@@ -3,10 +3,10 @@ import type { Outcome } from '#shared/types/offer'
 import { outcomeLabels } from '#shared/utils/format'
 defineProps<{ outcome: Outcome }>()
 const colors: Record<Outcome, string> = {
-  won: 'text-green-500 bg-[#274c36]',
-  lost: 'text-negative bg-[#493130]',
-  pending: 'text-lime bg-[#49452c]',
-  void: 'text-foreground bg-[#293d48]',
+  won: 'text-mint bg-outcome-won',
+  lost: 'text-negative bg-outcome-lost',
+  pending: 'text-lime bg-outcome-pending',
+  void: 'text-foreground bg-outcome-void',
 }
 const icons = { won: 'check', lost: 'close', pending: 'pending', void: 'restore' }
 </script>
