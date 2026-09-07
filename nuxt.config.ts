@@ -7,9 +7,6 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   vite: { plugins: [tailwindcss()] },
   runtimeConfig: {
-    demoMode:
-      process.env.NUXT_DEMO_MODE === 'true' ||
-      (!process.env.NUXT_PUBLIC_SUPABASE_URL && process.env.NODE_ENV !== 'production'),
     public: {
       supabaseUrl: '',
       supabasePublishableKey: '',

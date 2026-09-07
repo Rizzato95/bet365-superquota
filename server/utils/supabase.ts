@@ -4,11 +4,6 @@ import { createError, getHeader, getRequestURL, parseCookies, setCookie, setHead
 import type { H3Event } from 'h3'
 import type { Database } from '../../shared/types/database'
 
-export function isSnapshot(event: H3Event) {
-  return (
-    useRuntimeConfig(event).demoMode === true || String(useRuntimeConfig(event).demoMode) === 'true'
-  )
-}
 function credentials(event: H3Event) {
   const config = useRuntimeConfig(event)
   if (!config.public.supabaseUrl || !config.public.supabasePublishableKey) {
@@ -53,11 +48,6 @@ export function assertOrigin(event: H3Event) {
     throw createError({ statusCode: 403, statusMessage: 'Origine della richiesta non autorizzata' })
 }
 export async function requireAdmin(event: H3Event) {
-  if (isSnapshot(event))
-    throw createError({
-      statusCode: 503,
-      statusMessage: 'Anteprima in sola lettura: collega Supabase per gestire gli eventi.',
-    })
   const db = sessionDatabase(event)
   const {
     data: { user },

@@ -2,9 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { analyze, compareOdds, settle } from '../shared/utils/analytics'
 import { offerSchema, stakeSchema } from '../shared/utils/validation'
 import type { Offer } from '../shared/types/offer'
-import snapshot from '../server/data/offers-2026.json'
-import { readFileSync } from 'node:fs'
-import { importCsv } from '../scripts/lib/import-csv'
 
 function offer(overrides: Partial<Offer> = {}): Offer {
   return {
@@ -90,30 +87,6 @@ describe('fixed-stake settlement', () => {
     expect(comparison).toMatchObject({ included: 1, excluded: 1, extraProfit: 10 })
     expect(comparison.boosted.profit).toBe(20)
     expect(comparison.original.profit).toBe(10)
-  })
-  it('reconciles the original planning snapshot and the newly settled last offer', () => {
-    const current = snapshot as Offer[]
-    const previous = importCsv(
-      readFileSync(new URL('./fixtures/planning-2026.csv', import.meta.url), 'utf8'),
-    ).offers
-    expect(analyze(previous, 100)).toMatchObject({
-      total: 181,
-      settled: 180,
-      wins: 94,
-      losses: 86,
-      pending: 1,
-      profit: 9184.9,
-    })
-    expect(analyze(current, 100)).toMatchObject({
-      total: 181,
-      settled: 181,
-      wins: 94,
-      losses: 87,
-      pending: 0,
-      profit: 9084.9,
-    })
-    expect(previous.filter((o) => o.original_odds === null)).toHaveLength(3)
-    expect(current.filter((o) => o.original_odds === null)).toHaveLength(0)
   })
   it('rejects invalid inputs and preserves legitimate three-decimal odds', () => {
     for (const value of [0, -10, 0.001, Infinity, '', 'abc'])

@@ -3,7 +3,6 @@ import type { H3Event } from 'h3'
 import type { z } from 'zod'
 import type { Offer, OfferPage, StatisticsSource } from '../../shared/types/offer'
 import { archiveSchema, filterSchema } from '../../shared/utils/validation'
-import snapshot from '../data/offers-2026.json'
 
 export function parseInput<T>(schema: z.ZodType<T>, value: unknown): T {
   const parsed = schema.safeParse(value)
@@ -20,15 +19,6 @@ export function databaseError(error: { message: string; code?: string }) {
     statusCode: error.code === '42501' ? 403 : 500,
     statusMessage: 'Impossibile completare la richiesta. Riprova.',
   })
-}
-function filterSnapshot(filters: z.infer<typeof filterSchema>) {
-  return (snapshot as Offer[]).filter(
-    (o) =>
-      !o.deleted_at &&
-      (!filters.from || o.date >= filters.from) &&
-      (!filters.to || o.date <= filters.to) &&
-      (!filters.sport || o.sport === filters.sport),
-  )
 }
 function filterQuery<
   T extends {
@@ -49,24 +39,6 @@ export async function listOffers(
 ): Promise<OfferPage> {
   const filters = parseInput(archiveSchema, input),
     pageSize = 25
-  if (isSnapshot(event) && !admin) {
-    let offers = filterSnapshot(filters).filter(
-      (o) =>
-        (!filters.outcome || o.outcome === filters.outcome) &&
-        `${o.event} ${o.market}`
-          .toLocaleLowerCase('it')
-          .includes(filters.search.toLocaleLowerCase('it')),
-    )
-    offers.sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id))
-    if (filters.deleted === 'true') offers = []
-    return {
-      offers: offers.slice((filters.page - 1) * pageSize, filters.page * pageSize),
-      total: offers.length,
-      page: filters.page,
-      pageSize,
-      mode: 'snapshot',
-    }
-  }
   const db = admin ? await requireAdmin(event) : publicDatabase(event)
   let query = db.from('offers').select('*', { count: 'exact' })
   query =
@@ -84,11 +56,10 @@ export async function listOffers(
     .order('id', { ascending: false })
     .range((filters.page - 1) * pageSize, filters.page * pageSize - 1)
   if (error) databaseError(error)
-  return { offers: data ?? [], total: count ?? 0, page: filters.page, pageSize, mode: 'live' }
+  return { offers: data ?? [], total: count ?? 0, page: filters.page, pageSize }
 }
 export async function statisticsSource(event: H3Event, input: unknown): Promise<StatisticsSource> {
   const filters = parseInput(filterSchema, input)
-  if (isSnapshot(event)) return { offers: filterSnapshot(filters), mode: 'snapshot' }
   const db = publicDatabase(event),
     offers: Offer[] = []
   // Fetch every row; the API's default 1,000-row limit must not truncate statistics.
@@ -102,5 +73,5 @@ export async function statisticsSource(event: H3Event, input: unknown): Promise<
     offers.push(...(data ?? []))
     if (!data || data.length < 1000) break
   }
-  return { offers, mode: 'live' }
+  return { offers }
 }

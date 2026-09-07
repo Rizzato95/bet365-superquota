@@ -12,10 +12,7 @@
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
-    "import:preview": "node --import tsx scripts/import.ts",
-    "import:apply": "node --env-file=.env --import tsx scripts/import.ts --apply",
     "test:rls": "vitest run tests/rls.test.ts",
-    "test:netlify": "node scripts/check-netlify.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

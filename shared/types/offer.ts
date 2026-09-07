@@ -20,13 +20,11 @@ export type OfferInput = Pick<
   Offer,
   'date' | 'sport' | 'event' | 'market' | 'original_odds' | 'boosted_odds' | 'outcome'
 >
-export type DataMode = 'snapshot' | 'live'
 export type OfferPage = {
   offers: Offer[]
   total: number
   page: number
   pageSize: number
-  mode: DataMode
 }
-export type StatisticsSource = { offers: Offer[]; mode: DataMode }
+export type StatisticsSource = { offers: Offer[] }
 export type PeriodFilter = { from: string; to: string; sport: string }

@@ -43,10 +43,10 @@ describe('database RLS and soft deletion', () => {
   it('supports admin insert, update, recoverable deletion, restore and immutable import reruns', async () => {
     await identity('authenticated', { app_metadata: { role: 'admin' } })
     await db.exec(
-      "insert into public.offers (date,sport,event,market,original_odds,boosted_odds,outcome,source_key) values ('2026-01-01','Calcio','A - B','Goal',2,3,'won','snapshot-key')",
+      "insert into public.offers (date,sport,event,market,original_odds,boosted_odds,outcome,source_key) values ('2026-01-01','Calcio','A - B','Goal',2,3,'won','import-key')",
     )
     const updated = await db.query(
-      "update public.offers set outcome='lost', deleted_at=now() where source_key='snapshot-key' returning id, updated_at",
+      "update public.offers set outcome='lost', deleted_at=now() where source_key='import-key' returning id, updated_at",
     )
     expect(updated.rows).toHaveLength(1)
     await identity('anon', {})
@@ -56,19 +56,19 @@ describe('database RLS and soft deletion', () => {
     await expect(db.exec('delete from public.offers')).rejects.toThrow()
     await identity('service_role', {})
     await db.exec(
-      "insert into public.offers (date,sport,event,market,original_odds,boosted_odds,outcome,source_key) values ('2026-01-01','Calcio','A - B','Goal',2,3,'won','snapshot-key') on conflict(source_key) do nothing",
+      "insert into public.offers (date,sport,event,market,original_odds,boosted_odds,outcome,source_key) values ('2026-01-01','Calcio','A - B','Goal',2,3,'won','import-key') on conflict(source_key) do nothing",
     )
     const existing = await db.query<{ outcome: string; deleted_at: string }>(
-      "select outcome,deleted_at from public.offers where source_key='snapshot-key'",
+      "select outcome,deleted_at from public.offers where source_key='import-key'",
     )
     expect(existing.rows[0]?.outcome).toBe('lost')
     expect(existing.rows[0]?.deleted_at).not.toBeNull()
     await identity('authenticated', { app_metadata: { role: 'admin' } })
-    await db.exec("update public.offers set deleted_at=null where source_key='snapshot-key'")
+    await db.exec("update public.offers set deleted_at=null where source_key='import-key'")
     await identity('anon', {})
     expect((await db.query('select * from public.offers')).rows).toHaveLength(2)
   })
-  it('imports the production snapshot twice without duplicates and reconciles its return', async () => {
+  it('imports the initial import twice without duplicates and reconciles its return', async () => {
     await db.exec('reset role')
     const seed = await readFile(
       new URL('../supabase/migrations/20260907110959_import_superquotes_2026.sql', import.meta.url),
@@ -81,7 +81,7 @@ describe('database RLS and soft deletion', () => {
       count(*) filter(where outcome='lost')::int as lost,
       sum(case when outcome='won' then round(100*boosted_odds,2)-100
         when outcome='lost' then -100 else 0 end)::text as profit
-      from public.offers where source_key is not null and source_key <> 'snapshot-key'`)
+      from public.offers where source_key is not null and source_key <> 'import-key'`)
     expect(result.rows[0]).toEqual({ total: 181, won: 94, lost: 87, profit: '9084.90' })
   })
 })

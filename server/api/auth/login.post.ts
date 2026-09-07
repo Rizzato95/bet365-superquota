@@ -1,11 +1,6 @@
 import { z } from 'zod'
 export default defineEventHandler(async (event) => {
   assertOrigin(event)
-  if (isSnapshot(event))
-    throw createError({
-      statusCode: 503,
-      statusMessage: 'Collega Supabase per abilitare l’accesso.',
-    })
   const input = parseInput(
     z.object({ email: z.email(), password: z.string().min(1).max(200) }).strict(),
     await readBody(event),

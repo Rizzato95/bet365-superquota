@@ -1,4 +1,4 @@
--- Public event snapshot from Stats, imported once; never overwrite later edits.
+-- Initial public event import from Stats; never overwrite later edits.
 -- Deterministic source IDs preserve import identity across environments.
 insert into public.offers (id, date, sport, event, market, original_odds, boosted_odds, outcome, source_key)
 values
