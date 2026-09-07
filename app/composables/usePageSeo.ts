@@ -14,6 +14,7 @@ export function usePageSeo({ title, description, path, noindex = false }: PageSe
   const appConfig = useAppConfig()
   const origin = siteOrigin(runtimeConfig.public.siteUrl)
   const url = `${origin}${path}`
+  const socialImage = `${origin}/social-card.webp`
   const robots = noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'
 
   useSeoMeta({
@@ -26,9 +27,15 @@ export function usePageSeo({ title, description, path, noindex = false }: PageSe
     ogUrl: url,
     ogSiteName: appConfig.brand.name,
     ogLocale: 'it_IT',
-    twitterCard: 'summary',
+    ogImage: socialImage,
+    ogImageAlt: `${appConfig.brand.name} · ${title}`,
+    ogImageWidth: '1731',
+    ogImageHeight: '909',
+    twitterCard: 'summary_large_image',
     twitterTitle: `${title} | ${appConfig.brand.name}`,
     twitterDescription: description,
+    twitterImage: socialImage,
+    twitterImageAlt: `${appConfig.brand.name} · ${title}`,
   })
 
   useHead({ link: [{ key: 'canonical', rel: 'canonical', href: url }] })
