@@ -63,9 +63,9 @@ defineEmits<{ edit: [offer: Offer]; remove: [offer: Offer]; restore: [offer: Off
           <td
             class="px-3 py-3.5 border-t border-t-table-border text-right lg:px-4 lg:py-4.5 group-hover:bg-table-hover">
             <div class="flex justify-end items-center gap-2">
-              <del class="text-xs text-mint" v-if="offer.original_odds">{{
+              <del class="text-sm text-mint" v-if="offer.original_odds">{{
                 quota(offer.original_odds)
-                }}</del><strong class="text-base text-lime font-semibold">{{
+              }}</del><strong class="text-base text-lime font-semibold">{{
                   quota(offer.boosted_odds)
                 }}</strong>
             </div>

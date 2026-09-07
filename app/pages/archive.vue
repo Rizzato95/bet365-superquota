@@ -32,7 +32,7 @@ const query = computed(() => ({
   search: debouncedSearch.value,
   outcome: outcome.value,
 }))
-const { data, status, error, refresh } = await useFetch<OfferPage>('/api/offers', { query })
+const { data, status, error, refresh } = useFetch<OfferPage>('/api/offers', { query, lazy: true })
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">

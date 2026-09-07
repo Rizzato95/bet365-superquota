@@ -6,7 +6,7 @@ usePageSeo({
   path: '/management',
   noindex: true,
 })
-const { data: session, refresh: refreshSession, error: sessionError } = await useAdmin()
+const { data: session, refresh: refreshSession, error: sessionError } = useAdmin()
 const email = ref(''),
   password = ref(''),
   loginError = ref(''),
@@ -34,7 +34,13 @@ const { data, status, error, execute } = await useFetch<OfferPage>('/api/admin/o
   immediate: false,
   watch: false,
 })
-if (session.value?.admin) await execute()
+watch(
+  session,
+  (value) => {
+    if (value?.admin) execute()
+  },
+  { immediate: true },
+)
 watch(
   [filters, search, outcome, removed],
   () => {

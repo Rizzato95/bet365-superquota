@@ -2,6 +2,7 @@ export function useAdmin() {
   const event = useRequestEvent()
   return useFetch<{ admin: boolean; email: string | null }>('/api/auth/session', {
     key: 'admin-session',
+    lazy: true,
     async onResponse({ response }) {
       if (import.meta.server && event) {
         // SSR's internal fetch does not forward refreshed session cookies automatically.

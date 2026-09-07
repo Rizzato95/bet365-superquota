@@ -5,7 +5,7 @@ usePageSeo({
     'Consulta l’andamento storico delle superquote bet365: risultati, rendimento, profitto cumulativo e statistiche aggiornate.',
   path: '/',
 })
-const { data, error, status, refresh, stats, offers, comparison } = await useStatistics()
+const { data, error, status, refresh, stats, offers, comparison } = useStatistics()
 const latest = computed(() =>
   [...offers.value]
     .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id))

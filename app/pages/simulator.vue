@@ -17,7 +17,7 @@ watch(enteredStake, (value) => {
   const parsed = stakeSchema.safeParse(value.replace(',', '.'))
   if (parsed.success) stake.value = parsed.data
 })
-const { data, status, error, refresh, stats, comparison } = await useStatistics(stake)
+const { data, status, error, refresh, stats, comparison } = useStatistics(stake)
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">

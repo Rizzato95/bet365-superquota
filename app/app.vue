@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const config = useAppConfig()
 const route = useRoute()
-const { data: session } = await useAdmin()
+const { data: session } = useAdmin()
 const siteUrl = useRuntimeConfig().public.siteUrl.replace(/\/+$/, '')
 const navigation = [
   { to: '/', name: 'Panoramica', icon: 'overview' },
