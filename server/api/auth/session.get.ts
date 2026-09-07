@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  setHeader(event, 'cache-control', 'private, no-store')
+  setHeader(event, 'cache-control', 'private, no-cache')
   const db = sessionDatabase(event)
   const {
     data: { user },

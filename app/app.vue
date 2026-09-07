@@ -46,7 +46,6 @@ useHead({
       <NuxtLink
         to="/"
         class="flex items-center gap-2 text-base font-bold tracking-tight whitespace-nowrap xs:text-lg md:gap-2.5 md:text-lg xl:text-xl"
-        :aria-label="config.brand.name"
         ><span
           class="h-[29px] w-[29px] rounded-lg grid place-items-center bg-lime text-canvas md:h-[35px] md:w-[35px] md:rounded-lg"
           ><AppIcon name="boost" :size="24" /></span
@@ -54,7 +53,7 @@ useHead({
           >{{ config.brand.shortName
           }}<span
             class="font-normal text-mint tracking-tight ml-0.5 text-sm xs:text-sm md:ml-1 md:text-inherit"
-            >{{ config.brand.suffix }}</span
+            >&nbsp;{{ config.brand.suffix }}</span
           ></span
         ></NuxtLink
       >

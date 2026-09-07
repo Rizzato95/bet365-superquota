@@ -22,7 +22,7 @@ export function publicDatabase(event: H3Event) {
 }
 export function sessionDatabase(event: H3Event) {
   const { url, key } = credentials(event)
-  setHeader(event, 'cache-control', 'private, no-store')
+  setHeader(event, 'cache-control', 'private, no-cache')
   return createServerClient<Database>(url, key, {
     cookies: {
       getAll: () =>
