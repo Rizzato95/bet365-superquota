@@ -1,5 +1,10 @@
 <script setup lang="ts">
-useHead({ title: 'Overview' })
+usePageSeo({
+  title: 'Statistiche superquote bet365',
+  description:
+    'Consulta l’andamento storico delle superquote bet365: risultati, rendimento, profitto cumulativo e statistiche aggiornate.',
+  path: '/',
+})
 const { data, error, status, refresh, stats, offers, comparison } = await useStatistics()
 const latest = computed(() =>
   [...offers.value]
@@ -9,7 +14,7 @@ const latest = computed(() =>
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Overview</h1>
+    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Panoramica</h1>
   </div>
   <PeriodFilters />
   <DataState
@@ -47,7 +52,7 @@ const latest = computed(() =>
         <NuxtLink
           to="/archive"
           class="flex items-center gap-1 text-mint text-xs whitespace-nowrap md:gap-2 md:text-xs hover:text-mint"
-          >View archive<AppIcon name="arrow" :size="17"
+          >Vedi archivio<AppIcon name="arrow" :size="17"
         /></NuxtLink>
       </div>
       <div v-if="latest.length" class="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-3 xl:gap-4">

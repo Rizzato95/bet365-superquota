@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { Offer, OfferPage } from '#shared/types/offer'
-useHead({ title: 'Management', meta: [{ name: 'robots', content: 'noindex,nofollow' }] })
+usePageSeo({
+  title: 'Gestione',
+  description: 'Area riservata per la gestione delle superquote.',
+  path: '/management',
+  noindex: true,
+})
 const { data: session, refresh: refreshSession, error: sessionError } = await useAdmin()
 const email = ref(''),
   password = ref(''),
@@ -100,7 +105,7 @@ async function mutate(offer: Offer, restore = false) {
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Management</h1>
+    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Gestione</h1>
     <div
       v-if="session?.admin"
       class="flex gap-2 flex-wrap justify-end md:gap-2.5 md:flex-nowrap md:justify-normal"
@@ -118,28 +123,7 @@ async function mutate(offer: Offer, restore = false) {
       </button>
     </div>
   </div>
-  <div
-    v-if="session?.mode === 'snapshot'"
-    class="px-5.5 py-7 mx-auto border border-panel-border bg-[#19251d] rounded-lg max-w-117.5 mt-9 mb-15 text-center bg-modal-gradient md:p-9 md:mt-14 md:mb-22.5"
-  >
-    <span
-      class="mx-auto border border-[#506d47] w-[65px] h-[65px] bg-[#2c4430] rounded-lg grid place-items-center text-lime mt-0 mb-5.5"
-      ><AppIcon name="lock" :size="28"
-    /></span>
-    <h2 class="text-xl tracking-tight font-semibold mb-3 md:text-xl">
-      Gestione pronta per Supabase
-    </h2>
-    <p class="text-description leading-loose text-sm md:text-sm">
-      Questa anteprima mostra lo storico reale in sola lettura. L’accesso e il salvataggio degli
-      eventi saranno disponibili dopo il collegamento del progetto dedicato.
-    </p>
-    <NuxtLink
-      to="/archive"
-      class="px-4 py-2.5 border border-action-border inline-flex items-center justify-center gap-2 min-h-11 rounded-lg text-sm font-medium transition-colors duration-150 bg-action text-action-text mt-6 hover:bg-action-hover"
-      >View archive<AppIcon name="arrow" :size="16"
-    /></NuxtLink>
-  </div>
-  <DataState v-else-if="sessionError" error @retry="refreshSession()" />
+  <DataState v-if="sessionError" error @retry="refreshSession()" />
   <form
     v-else-if="!session?.admin"
     class="px-5.5 py-7 mx-auto border border-panel-border bg-[#19251d] rounded-lg max-w-117.5 mt-9 mb-15 text-center bg-modal-gradient md:p-9 md:mt-14 md:mb-22.5"

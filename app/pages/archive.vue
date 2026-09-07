@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { OfferPage } from '#shared/types/offer'
-useHead({ title: 'Archive' })
+usePageSeo({
+  title: 'Archivio superquote bet365',
+  description:
+    'Esplora tutte le superquote bet365 archiviate, con ricerca e filtri per periodo, sport ed esito.',
+  path: '/archive',
+})
 const { filters } = usePeriod()
 const page = ref(1),
   search = ref(''),
@@ -31,7 +36,7 @@ const { data, status, error, refresh } = await useFetch<OfferPage>('/api/offers'
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Archive</h1>
+    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Archivio</h1>
   </div>
   <PeriodFilters /><ArchiveControls
     v-model:search="search"

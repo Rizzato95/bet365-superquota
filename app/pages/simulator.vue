@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { stakeSchema } from '#shared/utils/validation'
 import { money, quota } from '#shared/utils/format'
-useHead({ title: 'Simulator' })
+usePageSeo({
+  title: 'Simulatore superquote bet365',
+  description:
+    'Simula il rendimento storico delle superquote bet365 scegliendo una puntata fissa personalizzata.',
+  path: '/simulator',
+})
 const stake = ref(100),
   enteredStake = ref('100')
 const stakeError = computed(() => {
@@ -16,7 +21,7 @@ const { data, status, error, refresh, stats, comparison } = await useStatistics(
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Simulator</h1>
+    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Simulatore</h1>
   </div>
   <PeriodFilters />
   <section
