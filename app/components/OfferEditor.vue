@@ -52,26 +52,26 @@ async function save() {
 <template>
   <dialog
     ref="dialog"
-    class="p-0 m-auto border border-[#4a6349] fixed top-0 right-0 bottom-0 left-0 rounded-[13px] bg-[#1a291f] text-[#e4eee5] w-150 max-w-[calc(100%_-_20px)] max-h-[calc(100dvh_-_20px)] overflow-auto shadow-[0_30px_100px_#0008] md:max-w-[calc(100%_-_30px)] md:max-h-[calc(100dvh_-_40px)] backdrop:bg-[#06140cba] backdrop:backdrop-blur-[4px]"
+    class="p-0 m-auto border border-[#4a6349] fixed top-0 right-0 bottom-0 left-0 rounded-lg bg-[#1a291f] text-foreground w-150 max-w-[calc(100%_-_20px)] max-h-[calc(100dvh_-_20px)] overflow-auto shadow-[0_30px_100px_#0008] md:max-w-[calc(100%_-_30px)] md:max-h-[calc(100dvh_-_40px)] backdrop:bg-[#06140cba] backdrop:backdrop-blur-[4px]"
     aria-labelledby="editor-title"
     @cancel.prevent="!saving && emit('cancel')"
   >
     <form @submit.prevent="save">
       <div
-        class="px-4.5 py-[21px] flex justify-between items-center border-b border-b-[#3b503a] gap-[15px] md:px-6.5 md:py-[25px]"
+        class="px-4.5 py-5 flex justify-between items-center border-b border-b-[#3b503a] gap-3.5 md:px-6.5 md:py-6"
       >
         <div>
           <span
-            class="text-[9px] tracking-[1.5px] text-[#96b79e] font-semibold mb-2 md:text-[10px] md:tracking-[1.7px]"
+            class="text-xs tracking-tight text-mint font-semibold mb-2 md:text-xs md:tracking-tight"
             >GESTIONE EVENTI</span
           >
-          <h2 class="text-xl tracking-[-0.5px] font-[550] md:text-[22px]" id="editor-title">
+          <h2 class="text-xl tracking-tight font-medium md:text-xl" id="editor-title">
             {{ offer ? 'Modifica superquota' : 'Nuova superquota' }}
           </h2>
         </div>
         <button
           type="button"
-          class="border border-[#3c4c3d] inline-grid place-items-center h-9.5 w-9.5 rounded-md bg-[#233128] text-[#c6d7cb]"
+          class="border border-icon-border inline-grid place-items-center h-9.5 w-9.5 rounded-md bg-icon-surface text-foreground"
           aria-label="Chiudi"
           :disabled="saving"
           @click="emit('cancel')"
@@ -79,110 +79,110 @@ async function save() {
           <AppIcon name="close" />
         </button>
       </div>
-      <div class="px-4.5 py-[21px] flex flex-col gap-4.5 md:px-6.5 md:py-6">
+      <div class="px-4.5 py-5 flex flex-col gap-4.5 md:px-6.5 md:py-6">
         <div class="grid grid-cols-2 gap-3 md:gap-4.5">
-          <label class="flex flex-col gap-2 text-xs text-[#b9d0bf] md:text-[13px]"
+          <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
             >Data<input
-              class="p-3 border border-[#3d5342] min-w-0 text-base rounded-md bg-[#121d16] min-h-11 w-full text-[#dce9df] md:text-[15px]"
+              class="p-3 border border-input-border min-w-0 text-base rounded-md bg-input min-h-11 w-full text-input-text md:text-sm"
               v-model="form.date"
               type="date"
               required
               :aria-invalid="!!errors.date"
-            /><small v-if="errors.date" class="text-[#f3a79c] text-xs leading-[1.6]">{{
+            /><small v-if="errors.date" class="text-error text-xs leading-relaxed">{{
               errors.date
             }}</small></label
-          ><label class="flex flex-col gap-2 text-xs text-[#b9d0bf] md:text-[13px]"
+          ><label class="flex flex-col gap-2 text-xs text-label md:text-sm"
             >Sport<select
-              class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 md:text-[15px]"
+              class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
               v-model="form.sport"
             >
-              <option class="text-foreground bg-[#1b251e]" v-for="s in sports" :key="s">
+              <option class="text-foreground bg-control" v-for="s in sports" :key="s">
                 {{ s }}
               </option>
             </select></label
           >
         </div>
-        <label class="flex flex-col gap-2 text-xs text-[#b9d0bf] md:text-[13px]"
+        <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
           >Evento<input
-            class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 md:text-[15px]"
+            class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
             v-model="form.event"
             autofocus
             placeholder="Es. Juventus - Milan"
             maxlength="240"
             required
             :aria-invalid="!!errors.event"
-          /><small v-if="errors.event" class="text-[#f3a79c] text-xs leading-[1.6]">{{
+          /><small v-if="errors.event" class="text-error text-xs leading-relaxed">{{
             errors.event
           }}</small></label
-        ><label class="flex flex-col gap-2 text-xs text-[#b9d0bf] md:text-[13px]"
+        ><label class="flex flex-col gap-2 text-xs text-label md:text-sm"
           >Mercato<textarea
-            class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 resize-y leading-[1.6] md:text-[15px]"
+            class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 resize-y leading-relaxed md:text-sm"
             v-model="form.market"
             rows="4"
             placeholder="Inserisci le condizioni della superquota, anche su più righe"
             maxlength="2000"
             required
             :aria-invalid="!!errors.market"
-          /><small v-if="errors.market" class="text-[#f3a79c] text-xs leading-[1.6]">{{
+          /><small v-if="errors.market" class="text-error text-xs leading-relaxed">{{
             errors.market
           }}</small></label
         >
         <div class="grid grid-cols-2 gap-3 md:gap-4.5">
-          <label class="flex flex-col gap-2 text-xs text-[#b9d0bf] md:text-[13px]"
-            >Quota originale <span class="text-[#7f9b87] text-[10px]">facoltativa</span
+          <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
+            >Quota originale <span class="text-mint text-xs">facoltativa</span
             ><input
-              class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 md:text-[15px]"
+              class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
               v-model="form.original_odds"
               inputmode="decimal"
               placeholder="2,00"
               :aria-invalid="!!errors.original_odds"
-            /><small v-if="errors.original_odds" class="text-[#f3a79c] text-xs leading-[1.6]">{{
+            /><small v-if="errors.original_odds" class="text-error text-xs leading-relaxed">{{
               errors.original_odds
             }}</small></label
-          ><label class="flex flex-col gap-2 text-xs text-[#b9d0bf] md:text-[13px]"
+          ><label class="flex flex-col gap-2 text-xs text-label md:text-sm"
             >Quota maggiorata<input
-              class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 md:text-[15px]"
+              class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
               v-model="form.boosted_odds"
               inputmode="decimal"
               placeholder="3,00"
               required
               :aria-invalid="!!errors.boosted_odds"
-            /><small v-if="errors.boosted_odds" class="text-[#f3a79c] text-xs leading-[1.6]">{{
+            /><small v-if="errors.boosted_odds" class="text-error text-xs leading-relaxed">{{
               errors.boosted_odds
             }}</small></label
           >
         </div>
-        <label class="flex flex-col gap-2 text-xs text-[#b9d0bf] md:text-[13px]"
+        <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
           >Esito<select
-            class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 md:text-[15px]"
+            class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
             v-model="form.outcome"
           >
-            <option class="text-foreground bg-[#1b251e]" v-for="o in outcomes" :key="o" :value="o">
+            <option class="text-foreground bg-control" v-for="o in outcomes" :key="o" :value="o">
               {{ outcomeLabels[o] }}
             </option>
           </select></label
         >
         <p
           v-if="serverError"
-          class="px-3.5 py-3 mx-0 my-[15px] border border-[#7c4b4380] text-[#f3a79c] text-xs leading-[1.6] rounded-[7px] bg-[#56312c70]"
+          class="px-3.5 py-3 mx-0 my-3.5 border border-alert-border text-error text-xs leading-relaxed rounded-lg bg-alert"
           role="alert"
         >
           {{ serverError }}
         </p>
       </div>
       <div
-        class="px-4.5 py-[17px] flex gap-2.5 justify-end border-t border-t-[#3c513e] bg-[#15231a] md:px-6.5 md:py-4.5"
+        class="px-4.5 py-4 flex gap-2.5 justify-end border-t border-t-[#3c513e] bg-[#15231a] md:px-6.5 md:py-4.5"
       >
         <button
           type="button"
-          class="px-4 py-[11px] border border-[#3a4c3e] inline-flex items-center justify-center gap-[9px] min-h-11 rounded-[7px] text-[13px] font-[550] transition-colors duration-150 bg-[#24332a] text-[#c4d3c9] hover:bg-[#304334]"
+          class="px-4 py-2.5 border border-action-border inline-flex items-center justify-center gap-2 min-h-11 rounded-lg text-sm font-medium transition-colors duration-150 bg-action text-action-text hover:bg-action-hover"
           :disabled="saving"
           @click="emit('cancel')"
         >
           Annulla</button
         ><button
           type="submit"
-          class="px-4 py-[11px] border border-transparent inline-flex items-center justify-center gap-[9px] min-h-11 rounded-[7px] text-[13px] font-[550] transition-colors duration-150 bg-[#dce982] text-[#1c3320] hover:bg-[#edf7a7]"
+          class="px-4 py-2.5 border border-transparent inline-flex items-center justify-center gap-2 min-h-11 rounded-lg text-sm font-medium transition-colors duration-150 bg-lime-action text-canvas hover:bg-lime-hover"
           :disabled="saving"
         >
           <AppIcon

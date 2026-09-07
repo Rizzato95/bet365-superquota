@@ -10,6 +10,49 @@
   --color-mint: #45dbac;
   --color-lime: #e8ee87;
   --color-negative: #f38c8e;
+  --color-control: #1b251e;
+  --color-control-border: #354238;
+  --color-control-text: #d4ddd7;
+  --color-panel-border: #2e3b31;
+  --color-panel-divider: #354731;
+  --color-input: #121d16;
+  --color-input-border: #3d5342;
+  --color-input-text: #dce9df;
+  --color-action: #24332a;
+  --color-action-hover: #304334;
+  --color-action-border: #3a4c3e;
+  --color-action-text: #c4d3c9;
+  --color-error: #f3a79c;
+  --color-alert: #56312c70;
+  --color-alert-border: #7c4b4380;
+  --color-table-header: #212e25;
+  --color-table-border: #2b3b2f;
+  --color-table-hover: #21302766;
+  --color-table-heading: #849e8c;
+  --color-label: #b9d0bf;
+  --color-secondary: #adbdaf;
+  --color-heading: #d2ded6;
+  --color-description: #99b1a0;
+  --color-icon-muted: #738b76;
+  --color-icon-border: #3c4c3d;
+  --color-icon-surface: #233128;
+  --color-stat-label: #98ae9c;
+  --color-stat-helper: #7f9786;
+  --color-stat-note: #7d9484;
+  --color-lime-hover: #edf7a7;
+  --color-lime-action: #dce982;
+  --background-image-header-gradient: linear-gradient(
+    110deg,
+    #174b3a 0%,
+    #133529 44%,
+    #102a22 100%
+  );
+  --background-image-metric-gradient: linear-gradient(125deg, #1e2821, #19221c);
+  --background-image-profit-gradient: linear-gradient(120deg, #1e392a, #1a2c20);
+  --background-image-simulator-gradient: linear-gradient(115deg, #243e2d, #1a281f);
+  --background-image-chart-gradient: linear-gradient(110deg, #202d24, #1b251f, #202d24);
+  --background-image-card-gradient: radial-gradient(ellipse at 0 0, #3a3f2250, transparent 70%);
+  --background-image-modal-gradient: radial-gradient(ellipse at top, #264a3166, transparent 70%);
   --breakpoint-xs: 23.4375rem;
   --breakpoint-xl: 75.0625rem;
   --breakpoint-2xl: 103.125rem;

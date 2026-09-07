@@ -119,7 +119,7 @@ onBeforeUnmount(() => chart?.destroy())
 </script>
 <template>
   <div
-    class="mx-3 h-[235px] relative mt-[13px] mb-[11px] min-w-0 md:mx-5 md:h-[285px] md:mt-3 md:mb-3.5 lg:h-70 xl:h-[285px] 2xl:h-80"
+    class="mx-3 h-[235px] relative mt-3 mb-2.5 min-w-0 md:mx-5 md:h-[285px] md:mt-3 md:mb-3.5 lg:h-70 xl:h-[285px] 2xl:h-80"
   >
     <canvas
       ref="canvas"

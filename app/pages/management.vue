@@ -99,21 +99,19 @@ async function mutate(offer: Offer, restore = false) {
 }
 </script>
 <template>
-  <div class="flex items-center justify-between mb-[23px] gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-[29px] font-[660] tracking-[-1.25px] leading-[1.25] md:text-[34px]">
-      Management
-    </h1>
+  <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
+    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Management</h1>
     <div
       v-if="session?.admin"
       class="flex gap-2 flex-wrap justify-end md:gap-2.5 md:flex-nowrap md:justify-normal"
     >
       <button
-        class="p-2.5 border border-[#3a4c3e] inline-flex items-center justify-center gap-0 min-h-9.5 rounded-[7px] text-[0] font-[550] transition-colors duration-150 bg-[#24332a] text-[#c4d3c9] md:px-4 md:py-[11px] md:gap-[9px] md:min-h-11 md:text-[13px] hover:bg-[#304334]"
+        class="p-2.5 border border-action-border inline-flex items-center justify-center min-h-9.5 rounded-lg font-medium transition-colors duration-150 bg-action text-action-text md:px-4 md:py-2.5 md:gap-2 md:min-h-11 hover:bg-action-hover"
         @click="logout"
       >
-        <AppIcon name="logout" :size="16" />Esci</button
+        <AppIcon name="logout" :size="16" /><span class="hidden md:inline">Esci</span></button
       ><button
-        class="px-[11px] py-[9px] border border-transparent inline-flex items-center justify-center gap-[9px] min-h-9.5 rounded-[7px] text-[11px] font-[550] transition-colors duration-150 bg-[#dce982] text-[#1c3320] md:px-4 md:py-[11px] md:min-h-11 md:text-[13px] hover:bg-[#edf7a7]"
+        class="px-2.5 py-2 border border-transparent inline-flex items-center justify-center gap-2 min-h-9.5 rounded-lg text-xs font-medium transition-colors duration-150 bg-lime-action text-canvas md:px-4 md:py-2.5 md:min-h-11 md:text-sm hover:bg-lime-hover"
         @click="edit()"
       >
         <AppIcon name="plus" :size="18" />Nuova superquota
@@ -122,52 +120,50 @@ async function mutate(offer: Offer, restore = false) {
   </div>
   <div
     v-if="session?.mode === 'snapshot'"
-    class="px-5.5 py-[27px] mx-auto border border-[#2e3b31] bg-[#19251d] rounded-[10px] max-w-117.5 mt-[35px] mb-15 text-center bg-[radial-gradient(ellipse_at_top,_#264a3166,_transparent_70%)] md:p-9 md:mt-[55px] md:mb-22.5"
+    class="px-5.5 py-7 mx-auto border border-panel-border bg-[#19251d] rounded-lg max-w-117.5 mt-9 mb-15 text-center bg-modal-gradient md:p-9 md:mt-14 md:mb-22.5"
   >
     <span
-      class="mx-auto border border-[#506d47] w-[65px] h-[65px] bg-[#2c4430] rounded-[15px] grid place-items-center text-lime mt-0 mb-5.5"
+      class="mx-auto border border-[#506d47] w-[65px] h-[65px] bg-[#2c4430] rounded-lg grid place-items-center text-lime mt-0 mb-5.5"
       ><AppIcon name="lock" :size="28"
     /></span>
-    <h2 class="text-[21px] tracking-[-0.6px] font-semibold mb-3 md:text-[22px]">
+    <h2 class="text-xl tracking-tight font-semibold mb-3 md:text-xl">
       Gestione pronta per Supabase
     </h2>
-    <p class="text-[#99b1a0] leading-[1.8] text-[13px] md:text-sm">
+    <p class="text-description leading-loose text-sm md:text-sm">
       Questa anteprima mostra lo storico reale in sola lettura. L’accesso e il salvataggio degli
       eventi saranno disponibili dopo il collegamento del progetto dedicato.
     </p>
     <NuxtLink
       to="/archive"
-      class="px-4 py-[11px] border border-[#3a4c3e] inline-flex items-center justify-center gap-[9px] min-h-11 rounded-[7px] text-[13px] font-[550] transition-colors duration-150 bg-[#24332a] text-[#c4d3c9] mt-[25px] hover:bg-[#304334]"
+      class="px-4 py-2.5 border border-action-border inline-flex items-center justify-center gap-2 min-h-11 rounded-lg text-sm font-medium transition-colors duration-150 bg-action text-action-text mt-6 hover:bg-action-hover"
       >View archive<AppIcon name="arrow" :size="16"
     /></NuxtLink>
   </div>
   <DataState v-else-if="sessionError" error @retry="refreshSession()" />
   <form
     v-else-if="!session?.admin"
-    class="px-5.5 py-[27px] mx-auto border border-[#2e3b31] bg-[#19251d] rounded-[10px] max-w-117.5 mt-[35px] mb-15 text-center bg-[radial-gradient(ellipse_at_top,_#264a3166,_transparent_70%)] md:p-9 md:mt-[55px] md:mb-22.5"
+    class="px-5.5 py-7 mx-auto border border-panel-border bg-[#19251d] rounded-lg max-w-117.5 mt-9 mb-15 text-center bg-modal-gradient md:p-9 md:mt-14 md:mb-22.5"
     @submit.prevent="login"
   >
     <span
-      class="mx-auto border border-[#506d47] w-[65px] h-[65px] bg-[#2c4430] rounded-[15px] grid place-items-center text-lime mt-0 mb-5.5"
+      class="mx-auto border border-[#506d47] w-[65px] h-[65px] bg-[#2c4430] rounded-lg grid place-items-center text-lime mt-0 mb-5.5"
       ><AppIcon name="lock" :size="27"
     /></span>
-    <h2 class="text-[21px] tracking-[-0.6px] font-semibold mb-3 md:text-[22px]">
-      Accedi alla gestione
-    </h2>
-    <p class="text-[#99b1a0] leading-[1.8] text-[13px] md:text-sm">
+    <h2 class="text-xl tracking-tight font-semibold mb-3 md:text-xl">Accedi alla gestione</h2>
+    <p class="text-description leading-loose text-sm md:text-sm">
       Accesso riservato all’amministratore.
     </p>
-    <label class="flex flex-col gap-2 text-left text-[13px] text-[#b4c9ba] mt-5"
+    <label class="flex flex-col gap-2 text-left text-sm text-foreground mt-5"
       >Email<input
-        class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 md:text-[15px]"
+        class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
         v-model="email"
         type="email"
         autocomplete="username"
         required
         placeholder="nome@esempio.it" /></label
-    ><label class="flex flex-col gap-2 text-left text-[13px] text-[#b4c9ba] mt-5"
+    ><label class="flex flex-col gap-2 text-left text-sm text-foreground mt-5"
       >Password<input
-        class="p-3 border border-[#3d5342] w-full bg-[#121d16] rounded-md text-base text-[#dce9df] min-h-11 md:text-[15px]"
+        class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
         v-model="password"
         type="password"
         autocomplete="current-password"
@@ -175,13 +171,13 @@ async function mutate(offer: Offer, restore = false) {
     /></label>
     <p
       v-if="loginError"
-      class="px-3.5 py-3 mx-0 my-[15px] border border-[#7c4b4380] text-[#99b1a0] leading-[1.8] text-[13px] rounded-[7px] bg-[#56312c70] md:text-sm"
+      class="px-3.5 py-3 mx-0 my-3.5 border border-alert-border text-description leading-loose text-sm rounded-lg bg-alert md:text-sm"
       role="alert"
     >
       {{ loginError }}
     </p>
     <button
-      class="px-4 py-[11px] border border-transparent inline-flex items-center justify-center gap-[9px] min-h-11 rounded-[7px] text-[13px] font-[550] transition-colors duration-150 bg-[#dce982] text-[#1c3320] w-full mt-6.5 hover:bg-[#edf7a7]"
+      class="px-4 py-2.5 border border-transparent inline-flex items-center justify-center gap-2 min-h-11 rounded-lg text-sm font-medium transition-colors duration-150 bg-lime-action text-canvas w-full mt-6.5 hover:bg-lime-hover"
       :disabled="loggingIn"
     >
       <AppIcon v-if="loggingIn" name="loading" class="animate-spin" :size="17" />{{
@@ -191,15 +187,15 @@ async function mutate(offer: Offer, restore = false) {
   </form>
   <template v-else
     ><PeriodFilters />
-    <div class="flex gap-2.5 mb-[23px]">
+    <div class="flex gap-2.5 mb-6">
       <button
-        class="px-3.5 py-[9px] border border-[#3b5140] flex gap-[7px] items-center rounded-md bg-[#203027] text-[13px] text-[#9eb7a6] min-h-10.5 aria-pressed:border-[#7c8e4d] aria-pressed:text-lime aria-pressed:bg-[#35442a]"
+        class="px-3.5 py-2 border border-[#3b5140] flex gap-1.5 items-center rounded-md bg-[#203027] text-sm text-mint min-h-10.5 aria-pressed:border-[#7c8e4d] aria-pressed:text-lime aria-pressed:bg-[#35442a]"
         :aria-pressed="!removed"
         @click="removed = false"
       >
         Scommesse attive</button
       ><button
-        class="px-3.5 py-[9px] border border-[#3b5140] flex gap-[7px] items-center rounded-md bg-[#203027] text-[13px] text-[#9eb7a6] min-h-10.5 aria-pressed:border-[#7c8e4d] aria-pressed:text-lime aria-pressed:bg-[#35442a]"
+        class="px-3.5 py-2 border border-[#3b5140] flex gap-1.5 items-center rounded-md bg-[#203027] text-sm text-mint min-h-10.5 aria-pressed:border-[#7c8e4d] aria-pressed:text-lime aria-pressed:bg-[#35442a]"
         :aria-pressed="removed"
         @click="removed = true"
       >
@@ -208,14 +204,14 @@ async function mutate(offer: Offer, restore = false) {
     </div>
     <p
       v-if="notice"
-      class="px-4 py-3.5 border border-[#427653] flex items-center gap-[9px] bg-[#214d3470] text-[#a4e9be] rounded-[7px] mb-4.5 text-[13px]"
+      class="px-4 py-3.5 border border-[#427653] flex items-center gap-2 bg-[#214d3470] text-mint rounded-lg mb-4.5 text-sm"
       role="status"
     >
       <AppIcon name="check" :size="17" />{{ notice }}
     </p>
     <p
       v-if="operationError"
-      class="px-3.5 py-3 mx-0 my-[15px] border border-[#7c4b4380] text-[#f3a79c] text-xs leading-[1.6] rounded-[7px] bg-[#56312c70]"
+      class="px-3.5 py-3 mx-0 my-3.5 border border-alert-border text-error text-xs leading-relaxed rounded-lg bg-alert"
       role="alert"
     >
       {{ operationError }}

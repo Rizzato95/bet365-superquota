@@ -10,22 +10,22 @@ async function changePage(nextPage: number) {
 </script>
 <template>
   <div
-    class="flex items-center justify-between gap-[15px] mt-[23px] text-[11px] text-[#839b8b] flex-wrap md:text-xs md:flex-nowrap"
+    class="flex items-center justify-between gap-3.5 mt-6 text-xs text-mint flex-wrap md:text-xs md:flex-nowrap"
   >
     <span
-      >Pagina <strong class="text-[#c1d2c6]">{{ page }}</strong> di {{ pages
+      >Pagina <strong class="text-foreground">{{ page }}</strong> di {{ pages
       }}<span class="hidden md:inline"> · {{ total }} scommesse</span></span
     >
-    <div class="flex gap-[7px] md:gap-[9px]">
+    <div class="flex gap-1.5 md:gap-2">
       <button
-        class="px-2.5 py-2 border border-[#3a4c3e] inline-flex items-center justify-center gap-[3px] min-h-9.5 rounded-[7px] text-[11px] font-[550] transition-colors duration-150 bg-[#24332a] text-[#c4d3c9] md:px-3 md:gap-[9px] md:text-xs hover:bg-[#304334]"
+        class="px-2.5 py-2 border border-action-border inline-flex items-center justify-center gap-0.5 min-h-9.5 rounded-lg text-xs font-medium transition-colors duration-150 bg-action text-action-text md:px-3 md:gap-2 md:text-xs hover:bg-action-hover"
         :disabled="page <= 1 || loading"
         aria-label="Pagina precedente"
         @click="changePage(page - 1)"
       >
         <AppIcon name="left" :size="17" /><span>Precedente</span></button
       ><button
-        class="px-2.5 py-2 border border-[#3a4c3e] inline-flex items-center justify-center gap-[3px] min-h-9.5 rounded-[7px] text-[11px] font-[550] transition-colors duration-150 bg-[#24332a] text-[#c4d3c9] md:px-3 md:gap-[9px] md:text-xs hover:bg-[#304334]"
+        class="px-2.5 py-2 border border-action-border inline-flex items-center justify-center gap-0.5 min-h-9.5 rounded-lg text-xs font-medium transition-colors duration-150 bg-action text-action-text md:px-3 md:gap-2 md:text-xs hover:bg-action-hover"
         :disabled="page >= pages || loading"
         aria-label="Pagina successiva"
         @click="changePage(page + 1)"

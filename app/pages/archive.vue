@@ -30,8 +30,8 @@ const query = computed(() => ({
 const { data, status, error, refresh } = await useFetch<OfferPage>('/api/offers', { query })
 </script>
 <template>
-  <div class="flex items-center justify-between mb-[23px] gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-[29px] font-[660] tracking-[-1.25px] leading-[1.25] md:text-[34px]">Archive</h1>
+  <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
+    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Archive</h1>
   </div>
   <PeriodFilters /><ArchiveControls
     v-model:search="search"
