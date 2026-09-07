@@ -2,14 +2,37 @@
 const config = useAppConfig()
 const route = useRoute()
 const { data: session } = await useAdmin()
+const siteUrl = useRuntimeConfig().public.siteUrl.replace(/\/+$/, '')
 const navigation = [
-  { to: '/', name: 'Overview', icon: 'overview' },
-  { to: '/archive', name: 'Archive', icon: 'archive' },
-  { to: '/simulator', name: 'Simulator', icon: 'simulator' },
+  { to: '/', name: 'Panoramica', icon: 'overview' },
+  { to: '/simulator', name: 'Simulatore', icon: 'simulator' },
+  { to: '/archive', name: 'Archivio', icon: 'archive' },
 ]
 useHead({
   titleTemplate: (title) =>
     title === config.brand.name ? title : `${title} · ${config.brand.name}`,
+})
+useHead({
+  script: [
+    {
+      key: 'website-schema',
+      type: 'application/ld+json' as any,
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: config.brand.name,
+        url: siteUrl,
+        inLanguage: 'it-IT',
+        description:
+          'Archivio delle superquote bet365, statistiche e simulazione del rendimento storico a puntata fissa.',
+        publisher: {
+          '@type': 'Person',
+          name: config.owner.name,
+          url: config.owner.website,
+        },
+      }),
+    },
+  ],
 })
 </script>
 <template>
@@ -38,10 +61,10 @@ useHead({
       <NuxtLink
         to="/management"
         class="px-2.5 py-2 border border-[#446052] ml-auto flex items-center gap-2 rounded-lg text-foreground text-sm min-h-9 md:px-3 md:py-2 md:min-h-10 hover:border-[#6eaa88] hover:bg-[#294b3a]"
-        aria-label="Management"
+        aria-label="Gestione"
         ><AppIcon :name="session?.admin ? 'settings' : 'lock'" :size="16" /><span
           class="hidden md:inline"
-          >Management</span
+          >Gestione</span
         ></NuxtLink
       >
     </header>
@@ -70,13 +93,20 @@ useHead({
           class="px-3.5 py-3.5 flex items-center gap-3 text-muted rounded-lg text-sm mb-1 transition-colors duration-150 aria-[current=page]:bg-[#21392c] aria-[current=page]:text-mint hover:bg-[#24372a] hover:text-foreground"
           to="/management"
           :aria-current="route.path.startsWith('/management') ? 'page' : undefined"
-          ><AppIcon name="settings" /><span>Management</span></NuxtLink
+          ><AppIcon name="settings" /><span>Gestione</span></NuxtLink
         >
       </template>
       <div class="px-4 mt-auto pt-10 pb-1.5">
         <span
           class="block border-t border-t-[#2a362d] mt-6.5 pt-5 text-xs leading-relaxed text-muted"
-          >Progetto indipendente da bet365</span
+          >© 2026
+          <a
+            class="text-mint hover:underline"
+            :href="config.owner.website"
+            target="_blank"
+            rel="noreferrer"
+            >{{ config.owner.name }}</a
+          ><br />Progetto indipendente, non affiliato a bet365.</span
         >
       </div>
     </aside>
@@ -88,9 +118,16 @@ useHead({
       <footer
         class="px-0 flex justify-between gap-2 mt-7.5 pt-5 pb-5.5 border-t border-t-[#29372d] text-xs text-muted flex-col leading-relaxed md:gap-3 md:pt-5.5 md:flex-row md:leading-normal lg:mt-9.5"
       >
-        <span class="first:text-mint">{{ config.brand.name }}</span
-        ><span class="first:text-mint"
-          >Risultati storici · Simulazioni teoriche a puntata fissa</span
+        <span
+          >© 2026
+          <a
+            class="text-mint hover:underline"
+            :href="config.owner.website"
+            target="_blank"
+            rel="noreferrer"
+            >{{ config.owner.name }}</a
+          >
+          · Progetto indipendente, non affiliato a bet365.</span
         >
       </footer>
     </main>

@@ -13,7 +13,11 @@ export default defineNuxtConfig({
     public: {
       supabaseUrl: '',
       supabasePublishableKey: '',
-      siteUrl: 'http://localhost:3000',
+      siteUrl:
+        process.env.NUXT_PUBLIC_SITE_URL ||
+        (process.env.NODE_ENV === 'production'
+          ? 'https://bet365-superquota.netlify.app'
+          : 'http://localhost:3000'),
       googleAnalyticsId: '',
     },
   },
@@ -28,6 +32,7 @@ export default defineNuxtConfig({
             'Archivio delle superquote bet365, statistiche e simulazione del rendimento storico a puntata fissa.',
         },
         { name: 'theme-color', content: '#102d26' },
+        { name: 'robots', content: 'index, follow, max-image-preview:large' },
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     },

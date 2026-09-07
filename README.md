@@ -2,7 +2,7 @@
 
 Nuxt 4, Tailwind CSS 4, Supabase e Chart.js. Interfaccia italiana responsive con panoramica, archivio, simulatore e gestione amministrativa.
 
-Le pagine e la navigazione usano nomi inglesi: **Overview** (`/`, `index.vue`), **Archive** (`/archive`, `archive.vue`), **Simulator** (`/simulator`, `simulator.vue`) e **Management** (`/management`, `management.vue`). I precedenti URL italiani reindirizzano alle nuove pagine.
+Le pagine usano percorsi inglesi e nomi italiani: **Panoramica** (`/`, `index.vue`), **Archivio** (`/archive`, `archive.vue`), **Simulatore** (`/simulator`, `simulator.vue`) e **Gestione** (`/management`, `management.vue`). I precedenti URL italiani reindirizzano alle nuove pagine.
 
 ## Avvio locale
 
