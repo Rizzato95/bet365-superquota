@@ -1,7 +1,9 @@
-export const sports = ['Calcio', 'Tennis', 'Basket', 'Motori', 'Altro'] as const
-export const outcomes = ['pending', 'won', 'lost', 'void'] as const
-export type Sport = (typeof sports)[number]
-export type Outcome = (typeof outcomes)[number]
+import type { Database } from '../../supabase/database.types'
+
+export type Sport = Database['public']['Enums']['offer_sport']
+export type Outcome = Database['public']['Enums']['offer_outcome']
+export const sports = ['Calcio', 'Tennis', 'Basket', 'Motori', 'Altro'] as const satisfies readonly Sport[]
+export const outcomes = ['pending', 'won', 'lost', 'void'] as const satisfies readonly Outcome[]
 export type Offer = {
   id: string
   date: string

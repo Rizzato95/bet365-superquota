@@ -18,9 +18,9 @@ export type Database = {
           id: string
           market: string
           original_odds: number | null
-          outcome: string
+          outcome: 'pending' | 'won' | 'lost' | 'void'
           source_key: string | null
-          sport: string
+          sport: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
           updated_at: string
         }
         Insert: {
@@ -32,9 +32,9 @@ export type Database = {
           id?: string
           market: string
           original_odds?: number | null
-          outcome?: string
+          outcome?: 'pending' | 'won' | 'lost' | 'void'
           source_key?: string | null
-          sport: string
+          sport: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
           updated_at?: string
         }
         Update: {
@@ -46,9 +46,9 @@ export type Database = {
           id?: string
           market?: string
           original_odds?: number | null
-          outcome?: string
+          outcome?: 'pending' | 'won' | 'lost' | 'void'
           source_key?: string | null
-          sport?: string
+          sport?: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
           updated_at?: string
         }
         Relationships: []
@@ -61,7 +61,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      offer_outcome: 'pending' | 'won' | 'lost' | 'void'
+      offer_sport: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
     }
     CompositeTypes: {
       [_ in never]: never
