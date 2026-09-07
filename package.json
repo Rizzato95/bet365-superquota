@@ -33,7 +33,6 @@
     "@electric-sql/pglite": "0.5.8",
     "@types/node": "24.13.3",
     "prettier": "3.9.6",
-    "tsx": "4.23.13",
     "typescript": "5.9.3",
     "vitest": "5.0.0",
     "vue-tsc": "3.3.11"
