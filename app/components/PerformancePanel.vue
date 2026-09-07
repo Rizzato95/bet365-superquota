@@ -37,7 +37,7 @@ const compare = ref(false)
           type="checkbox"
           role="switch"
         /><span
-          class="peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-mint peer-focus-visible:-outline-offset-2 inline-block w-[27px] h-[15px] rounded-full bg-[#35463a] relative after:content-[''] after:absolute after:left-[3px] after:top-0.5 after:w-[9px] after:h-[9px] after:rounded-full after:bg-[#8ea596] after:transition-transform after:duration-150 peer-checked:bg-[#377956] peer-checked:after:bg-[#8aefbb] peer-checked:after:translate-x-3"
+          class="peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-mint peer-focus-visible:-outline-offset-2 inline-block w-[27px] h-[15px] rounded-full bg-[#35463a] relative after:content-[''] after:absolute after:left-[3px] after:top-1/2 after:-translate-y-1/2 after:w-[9px] after:h-[9px] after:rounded-full after:bg-[#8ea596] after:transition-transform after:duration-150 peer-checked:bg-[#377956] peer-checked:after:bg-[#8aefbb] peer-checked:after:translate-x-3"
         /><span>Confronta quote</span></label
       >
     </div>
