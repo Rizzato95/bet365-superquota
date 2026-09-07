@@ -1,0 +1,9 @@
+node_modules
+.nuxt
+.output
+.netlify
+dist
+package-lock.json
+server/data
+tests/fixtures
+supabase/.temp
