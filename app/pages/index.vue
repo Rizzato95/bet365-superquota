@@ -14,7 +14,12 @@ const latest = computed(() =>
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Panoramica</h1>
+    <div>
+      <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Panoramica</h1>
+      <p class="mt-1 text-sm leading-relaxed text-muted">
+        Risultati, andamento e simulazioni della superquota proposta da bet365.
+      </p>
+    </div>
   </div>
   <PeriodFilters />
   <DataState v-if="error || !data" :error="!!error" :loading="status === 'pending'" @retry="refresh()" />

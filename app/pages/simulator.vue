@@ -21,7 +21,12 @@ const { data, status, error, refresh, stats, comparison } = useStatistics(stake)
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
-    <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Simulatore</h1>
+    <div>
+      <h1 class="text-3xl font-semibold tracking-tight leading-tight md:text-4xl">Simulatore</h1>
+      <p class="mt-1 text-sm leading-relaxed text-muted">
+        Scopri il rendimento storico con una puntata fissa.
+      </p>
+    </div>
   </div>
   <PeriodFilters />
   <section
