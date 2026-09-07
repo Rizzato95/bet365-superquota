@@ -135,7 +135,7 @@ const { data, status, error, refresh, stats, comparison } = await useStatistics(
       </div>
     </div>
     <div
-      class="grid grid-cols-1 gap-4.5 items-stretch mb-7.5 md:grid-cols-[minmax(0,_1.9fr)_minmax(250px,_1fr)] md:gap-3.5 md:mb-8.5 lg:grid-cols-[minmax(0,_1.8fr)_minmax(240px,_1fr)] xl:grid-cols-[minmax(0,_2.25fr)_minmax(260px,_1fr)] xl:gap-5"
+      class="hidden grid-cols-1 gap-4.5 items-stretch mb-7.5 md:grid md:grid-cols-[minmax(0,_1.9fr)_minmax(250px,_1fr)] md:gap-3.5 md:mb-8.5 lg:grid-cols-[minmax(0,_1.8fr)_minmax(240px,_1fr)] xl:grid-cols-[minmax(0,_2.25fr)_minmax(260px,_1fr)] xl:gap-5"
     >
       <PerformancePanel :stats="stats" :comparison="comparison" :stake="stake" />
       <MonthlyResults :stats="stats" />
