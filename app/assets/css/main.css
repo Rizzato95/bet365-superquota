@@ -127,3 +127,9 @@
     }
   }
 }
+
+@utility select-control {
+  @apply appearance-none bg-no-repeat pr-10;
+  background-image: url('/icons/chevron-down.svg');
+  background-position: right 0.875rem center;
+}

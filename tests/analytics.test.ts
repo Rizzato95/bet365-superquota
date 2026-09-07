@@ -93,6 +93,7 @@ describe('fixed-stake settlement', () => {
       expect(stakeSchema.safeParse(value).success).toBe(false)
     const { id, source_key, created_at, updated_at, deleted_at, ...input } = offer()
     expect(offerSchema.safeParse({ ...input, date: '2026-02-30' }).success).toBe(false)
+    expect(offerSchema.safeParse({ ...input, original_odds: null }).success).toBe(false)
     expect(offerSchema.safeParse({ ...input, boosted_odds: 1.2 }).success).toBe(false)
     expect(offerSchema.safeParse({ ...input, boosted_odds: 2.199 }).success).toBe(true)
   })

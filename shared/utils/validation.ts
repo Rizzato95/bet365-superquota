@@ -21,12 +21,12 @@ export const offerSchema = z
     sport: z.enum(sports),
     event: z.string().trim().min(2, 'Inserisci un evento').max(240),
     market: z.string().trim().min(2, 'Inserisci il mercato').max(2000),
-    original_odds: odds.nullable(),
+    original_odds: odds,
     boosted_odds: odds,
     outcome: z.enum(outcomes),
   })
   .strict()
-  .refine((v) => v.original_odds === null || v.boosted_odds >= v.original_odds, {
+  .refine((v) => v.boosted_odds >= v.original_odds, {
     message: 'La quota maggiorata non può essere inferiore alla quota originale',
     path: ['boosted_odds'],
   })

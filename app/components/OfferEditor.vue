@@ -27,7 +27,7 @@ async function save() {
   errors.value = {}
   const parsed = offerSchema.safeParse({
     ...form,
-    original_odds: form.original_odds.trim() ? Number(form.original_odds.replace(',', '.')) : null,
+    original_odds: Number(form.original_odds.replace(',', '.')),
     boosted_odds: Number(form.boosted_odds.replace(',', '.')),
   })
   if (!parsed.success) {
@@ -93,7 +93,7 @@ async function save() {
             }}</small></label
           ><label class="flex flex-col gap-2 text-xs text-label md:text-sm"
             >Sport<select
-              class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
+              class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 select-control md:text-sm"
               v-model="form.sport"
             >
               <option class="text-foreground bg-control" v-for="s in sports" :key="s">
@@ -129,12 +129,12 @@ async function save() {
         >
         <div class="grid grid-cols-2 gap-3 md:gap-4.5">
           <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
-            >Quota originale <span class="text-mint text-xs">facoltativa</span
-            ><input
+            >Quota originale<input
               class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
               v-model="form.original_odds"
               inputmode="decimal"
               placeholder="2,00"
+              required
               :aria-invalid="!!errors.original_odds"
             /><small v-if="errors.original_odds" class="text-error text-xs leading-relaxed">{{
               errors.original_odds
@@ -154,7 +154,7 @@ async function save() {
         </div>
         <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
           >Esito<select
-            class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 md:text-sm"
+            class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 select-control md:text-sm"
             v-model="form.outcome"
           >
             <option class="text-foreground bg-control" v-for="o in outcomes" :key="o" :value="o">

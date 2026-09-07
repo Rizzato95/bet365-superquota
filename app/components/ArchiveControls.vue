@@ -23,7 +23,7 @@ defineProps<{ total?: number }>()
       ><span class="sr-only">Esito</span
       ><select
         v-model="outcome"
-        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pr-6 pl-2 text-xs max-w-full appearance-none bg-[url('/icons/chevron-down.svg')] bg-position-[right_7px_center] bg-no-repeat xs:text-xs md:pr-7.5 md:pl-2.5 md:text-sm md:bg-position-[right_9px_center]"
+        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control xs:text-xs md:pl-2.5 md:text-sm"
       >
         <option class="text-foreground bg-control" value="">Tutti gli esiti</option>
         <option class="text-foreground bg-control" v-for="o in outcomes" :key="o" :value="o">

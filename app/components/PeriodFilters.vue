@@ -17,7 +17,7 @@ const months = Array.from({ length: 12 }, (_, i) => ({
       ><select
         id="period-mode"
         v-model="mode"
-        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pr-6 pl-2 text-xs max-w-full appearance-none bg-[url('/icons/chevron-down.svg')] bg-position-[right_7px_center] bg-no-repeat xs:text-xs md:pr-7.5 md:pl-2.5 md:text-sm md:bg-position-[right_9px_center]"
+        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control xs:text-xs md:pl-2.5 md:text-sm"
       >
         <option class="text-foreground bg-control" value="year">Anno completo</option>
         <option class="text-foreground bg-control" value="month">Mese</option>
@@ -28,7 +28,7 @@ const months = Array.from({ length: 12 }, (_, i) => ({
         ><select
           id="period-year"
           v-model.number="year"
-          class="py-2 border border-control-border text-lime bg-control min-h-10 rounded-md pr-6 pl-2 text-xs max-w-full appearance-none bg-[url('/icons/chevron-down.svg')] bg-position-[right_7px_center] bg-no-repeat min-w-17 xs:text-xs md:pr-7.5 md:pl-2.5 md:text-sm md:bg-position-[right_9px_center] md:min-w-[85px]"
+          class="py-2 border border-control-border text-lime bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control min-w-17 xs:text-xs md:pl-2.5 md:text-sm md:min-w-[85px]"
         >
           <option class="text-foreground bg-control" v-for="y in years" :key="y" :value="y">
             {{ y }}
@@ -40,7 +40,7 @@ const months = Array.from({ length: 12 }, (_, i) => ({
         ><select
           id="period-month"
           v-model.number="month"
-          class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pr-6 pl-2 text-xs max-w-full appearance-none bg-[url('/icons/chevron-down.svg')] bg-position-[right_7px_center] bg-no-repeat xs:text-xs md:pr-7.5 md:pl-2.5 md:text-sm md:bg-position-[right_9px_center]"
+          class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control xs:text-xs md:pl-2.5 md:text-sm"
         >
           <option
             class="text-foreground bg-control"
@@ -71,7 +71,7 @@ const months = Array.from({ length: 12 }, (_, i) => ({
       ><AppIcon class="hidden md:block" name="filter" :size="15" /><span class="sr-only">Sport</span
       ><select
         v-model="sport"
-        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pr-5 pl-0 text-xs max-w-full appearance-none bg-[url('/icons/chevron-down.svg')] bg-position-[right_7px_center] bg-no-repeat xs:pl-1 xs:text-xs md:pr-7.5 md:pl-2.5 md:text-sm md:bg-position-[right_9px_center]"
+        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-0 text-xs max-w-full select-control xs:pl-1 xs:text-xs md:pl-2.5 md:text-sm"
       >
         <option class="text-foreground bg-control" value="">Tutti gli sport</option>
         <option class="text-foreground bg-control" v-for="s in sports" :key="s">{{ s }}</option>
