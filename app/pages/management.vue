@@ -34,6 +34,20 @@ const { data, status, error, execute } = await useFetch<OfferPage>('/api/admin/o
   immediate: false,
   watch: false,
 })
+let refreshingExpiredSession = false
+async function handleExpiredSession() {
+  if (refreshingExpiredSession) return
+  refreshingExpiredSession = true
+  editorOpen.value = false
+  deleting.value = null
+  data.value = undefined
+  operationError.value = ''
+  try {
+    await refreshSession()
+  } finally {
+    refreshingExpiredSession = false
+  }
+}
 watch(
   session,
   (value) => {
@@ -50,6 +64,9 @@ watch(
 )
 watch(adminQuery, () => {
   if (session.value?.admin) execute()
+})
+watch(error, async (requestError) => {
+  if (isUnauthorizedError(requestError)) await handleExpiredSession()
 })
 async function login() {
   loggingIn.value = true
@@ -103,6 +120,10 @@ async function mutate(offer: Offer, restore = false) {
     await refreshNuxtData()
     await execute()
   } catch (error: any) {
+    if (isUnauthorizedError(error)) {
+      await handleExpiredSession()
+      return
+    }
     operationError.value = error.data?.statusMessage || 'Operazione non riuscita. Riprova.'
   } finally {
     busy.value = false
@@ -230,6 +251,7 @@ async function mutate(offer: Offer, restore = false) {
       v-if="editorOpen"
       :offer="editing"
       @saved="saved"
+      @session-expired="handleExpiredSession"
       @cancel="editorOpen = false" /><ConfirmRemoval
       v-if="deleting"
       :offer="deleting"

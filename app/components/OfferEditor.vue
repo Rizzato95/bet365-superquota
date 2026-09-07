@@ -4,7 +4,7 @@ import { sports, outcomes } from '#shared/types/offer'
 import { outcomeLabels } from '#shared/utils/format'
 import { offerSchema } from '#shared/utils/validation'
 const props = defineProps<{ offer: Offer | null }>()
-const emit = defineEmits<{ saved: []; cancel: [] }>()
+const emit = defineEmits<{ saved: []; cancel: []; sessionExpired: [] }>()
 const dialog = ref<HTMLDialogElement | null>(null)
 const form = reactive({
   date:
@@ -45,6 +45,10 @@ async function save() {
     await refreshNuxtData()
     emit('saved')
   } catch (error: any) {
+    if (isUnauthorizedError(error)) {
+      emit('sessionExpired')
+      return
+    }
     serverError.value = error.data?.statusMessage || 'Salvataggio non riuscito. Riprova.'
   } finally {
     saving.value = false
