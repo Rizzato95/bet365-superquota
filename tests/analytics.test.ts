@@ -76,17 +76,17 @@ describe('fixed-stake settlement', () => {
     ])
     expect(stats.months.map((m) => m.profit)).toEqual([40, -10])
   })
-  it('compares exactly the same sample, excluding missing original odds and deleted rows', () => {
+  it('compares every active offer and ignores deleted rows', () => {
     const offers = [
       offer(),
-      offer({ id: 'missing', original_odds: null, outcome: 'lost' }),
+      offer({ id: 'second', original_odds: 2, boosted_odds: 3, outcome: 'lost' }),
       offer({ id: 'deleted', deleted_at: '2026-01-03' }),
     ]
     expect(analyze(offers, 10).profit).toBe(10)
     const comparison = compareOdds(offers, 10)
-    expect(comparison).toMatchObject({ included: 1, excluded: 1, extraProfit: 10 })
-    expect(comparison.boosted.profit).toBe(20)
-    expect(comparison.original.profit).toBe(10)
+    expect(comparison.extraProfit).toBe(10)
+    expect(comparison.boosted.profit).toBe(10)
+    expect(comparison.original.profit).toBe(0)
   })
   it('rejects invalid inputs and preserves legitimate three-decimal odds', () => {
     for (const value of [0, -10, 0.001, Infinity, '', 'abc'])

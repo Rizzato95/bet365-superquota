@@ -19,9 +19,9 @@ const compare = ref(false)
       /></span>
     </div>
     <div
-      class="px-3 flex items-center justify-between gap-2 pt-4 pb-0.5 flex-wrap xs:px-4.5 md:px-5 md:gap-3.5 md:pt-6 md:pb-3 xl:px-6"
+      class="px-3 flex items-start justify-between gap-2 pt-4 pb-0.5 xs:px-4.5 md:px-5 md:gap-3.5 md:pt-6 md:pb-3 xl:px-6"
     >
-      <div class="flex gap-2.5 flex-wrap text-xs text-muted xs:text-xs md:gap-4 md:text-xs">
+      <div class="flex flex-col gap-1.5 text-xs text-muted xs:text-xs md:text-xs">
         <span class="flex items-center gap-1.5"
           ><i class="inline-block w-1.5 h-1.5 bg-mint rounded-full shrink-0" />Quota
           maggiorata</span
@@ -30,7 +30,7 @@ const compare = ref(false)
         >
       </div>
       <label
-        class="flex items-center gap-1.5 text-xs text-muted cursor-pointer min-h-8 relative xs:text-xs md:text-xs"
+        class="flex shrink-0 items-center gap-1.5 text-xs text-muted cursor-pointer relative xs:text-xs md:text-xs"
         ><input
           class="peer absolute top-0 right-0 bottom-0 left-0 w-full h-full opacity-0 cursor-pointer"
           v-model="compare"
@@ -41,24 +41,13 @@ const compare = ref(false)
         /><span>Confronta quote</span></label
       >
     </div>
-    <div
-      v-if="
-        compare
-          ? !comparison.boosted.settled && !comparison.boosted.voids
-          : !stats.settled && !stats.voids
-      "
+    <div v-if="!stats.settled && !stats.voids"
       class="p-7.5 flex items-center justify-center text-center flex-col gap-3.5 min-h-70 text-mint"
     >
-      <AppIcon name="chart" :size="36" /><strong class="text-base text-heading font-medium">{{
-        compare ? 'Nessun risultato confrontabile' : 'Nessun risultato da mostrare'
-      }}</strong>
-      <p class="text-sm leading-relaxed">
-        {{
-          compare
-            ? 'Servono scommesse concluse con entrambe le quote.'
-            : 'Il grafico apparirà quando ci saranno scommesse concluse.'
-        }}
-      </p>
+      <AppIcon name="chart" :size="36" /><strong class="text-base text-heading font-medium"
+        >Nessun risultato da mostrare</strong
+      >
+      <p class="text-sm leading-relaxed">Il grafico apparirà quando ci saranno scommesse concluse.</p>
     </div>
     <ClientOnly v-else
       ><ProfitChart
@@ -71,10 +60,7 @@ const compare = ref(false)
       v-if="compare"
       class="px-0 py-3.5 mx-4.5 my-0 border-t border-t-[#2b392e] flex justify-between gap-2 text-mint text-xs flex-wrap leading-relaxed md:mx-6 md:mt-auto md:pt-3.5 md:pb-4.5 md:gap-3 md:text-xs"
     >
-      <span
-        >{{ comparison.included }} scommesse confrontabili · {{ comparison.excluded }} escluse senza
-        quota originale</span
-      ><strong :class="comparison.extraProfit < 0 ? 'text-negative' : 'text-mint'"
+      <strong :class="comparison.extraProfit < 0 ? 'text-negative' : 'text-mint'"
         >{{ money(comparison.extraProfit, true) }} grazie al boost</strong
       >
     </div>

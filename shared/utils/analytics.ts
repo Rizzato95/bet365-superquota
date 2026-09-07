@@ -115,14 +115,11 @@ export function analyze(
 }
 export function compareOdds(offers: Offer[], stake: number, startDate?: string) {
   const active = offers.filter((o) => !o.deleted_at)
-  const comparable = active.filter((o) => o.original_odds !== null)
-  const boosted = analyze(comparable, stake, 'boosted', startDate)
-  const original = analyze(comparable, stake, 'original', startDate)
+  const boosted = analyze(active, stake, 'boosted', startDate)
+  const original = analyze(active, stake, 'original', startDate)
   return {
     boosted,
     original,
-    included: comparable.length,
-    excluded: active.length - comparable.length,
     extraProfit: new Decimal(boosted.profit).minus(original.profit).toNumber(),
   }
 }
