@@ -133,3 +133,11 @@
   background-image: url('/icons/chevron-down.svg');
   background-position: right 0.875rem center;
 }
+
+@utility filter-select {
+  @apply min-h-10 max-w-full rounded-md border border-control-border bg-control px-2 py-2 text-xs text-control-text select-control md:px-2.5 md:text-sm;
+}
+
+@utility form-select {
+  @apply min-h-11 w-full rounded-md border border-input-border bg-input p-3 text-base text-input-text select-control md:text-sm;
+}

@@ -20,6 +20,8 @@ const form = reactive({
 const errors = ref<Record<string, string>>({}),
   serverError = ref(''),
   saving = ref(false)
+const sportOptions = sports.map((value) => ({ value, label: value }))
+const outcomeOptions = outcomes.map((value) => ({ value, label: outcomeLabels[value] }))
 onMounted(() => dialog.value?.showModal())
 onBeforeUnmount(() => dialog.value?.close())
 async function save() {
@@ -92,14 +94,11 @@ async function save() {
               errors.date
             }}</small></label
           ><label class="flex flex-col gap-2 text-xs text-label md:text-sm"
-            >Sport<select
-              class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 select-control md:text-sm"
+            >Sport<AppSelect
               v-model="form.sport"
-            >
-              <option class="text-foreground bg-control" v-for="s in sports" :key="s">
-                {{ s }}
-              </option>
-            </select></label
+              variant="form"
+              :options="sportOptions"
+            /></label
           >
         </div>
         <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
@@ -153,14 +152,11 @@ async function save() {
           >
         </div>
         <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
-          >Esito<select
-            class="p-3 border border-input-border w-full bg-input rounded-md text-base text-input-text min-h-11 select-control md:text-sm"
+          >Esito<AppSelect
             v-model="form.outcome"
-          >
-            <option class="text-foreground bg-control" v-for="o in outcomes" :key="o" :value="o">
-              {{ outcomeLabels[o] }}
-            </option>
-          </select></label
+            variant="form"
+            :options="outcomeOptions"
+          /></label
         >
         <p
           v-if="serverError"

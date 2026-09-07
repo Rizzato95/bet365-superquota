@@ -4,6 +4,10 @@ import { outcomeLabels } from '#shared/utils/format'
 const search = defineModel<string>('search', { required: true })
 const outcome = defineModel<string>('outcome', { required: true })
 defineProps<{ total?: number }>()
+const outcomeOptions = [
+  { value: '', label: 'Tutti gli esiti' },
+  ...outcomes.map((value) => ({ value, label: outcomeLabels[value] })),
+]
 </script>
 <template>
   <div
@@ -21,15 +25,10 @@ defineProps<{ total?: number }>()
         aria-label="Cerca evento o mercato" /></label
     ><label class="flex-1 md:flex-initial"
       ><span class="sr-only">Esito</span
-      ><select
+      ><AppSelect
         v-model="outcome"
-        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control xs:text-xs md:pl-2.5 md:text-sm"
-      >
-        <option class="text-foreground bg-control" value="">Tutti gli esiti</option>
-        <option class="text-foreground bg-control" v-for="o in outcomes" :key="o" :value="o">
-          {{ outcomeLabels[o] }}
-        </option>
-      </select></label
+        :options="outcomeOptions"
+      /></label
     ><span class="ml-auto whitespace-nowrap text-mint text-xs md:text-xs"
       >{{ total ?? 0 }} scommesse</span
     >

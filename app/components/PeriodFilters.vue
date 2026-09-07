@@ -6,6 +6,13 @@ const months = Array.from({ length: 12 }, (_, i) => ({
   value: i + 1,
   label: new Intl.DateTimeFormat('it', { month: 'long' }).format(new Date(2026, i, 1)),
 }))
+const periodModes = [
+  { value: 'year', label: 'Anno completo' },
+  { value: 'month', label: 'Mese' },
+  { value: 'custom', label: 'Personalizzato' },
+]
+const yearOptions = years.map((value) => ({ value, label: String(value) }))
+const sportOptions = [{ value: '', label: 'Tutti gli sport' }, ...sports.map((value) => ({ value, label: value }))]
 </script>
 <template>
   <div
@@ -14,43 +21,27 @@ const months = Array.from({ length: 12 }, (_, i) => ({
     <div class="flex items-center gap-1.5 flex-wrap md:gap-2">
       <AppIcon name="calendar" :size="17" class="text-muted mr-1.5 hidden md:block" />
       <label class="sr-only" for="period-mode">Tipo di periodo</label
-      ><select
+      ><AppSelect
         id="period-mode"
         v-model="mode"
-        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control xs:text-xs md:pl-2.5 md:text-sm"
-      >
-        <option class="text-foreground bg-control" value="year">Anno completo</option>
-        <option class="text-foreground bg-control" value="month">Mese</option>
-        <option class="text-foreground bg-control" value="custom">Personalizzato</option>
-      </select>
+        :options="periodModes"
+      />
       <template v-if="mode !== 'custom'"
         ><label class="sr-only" for="period-year">Anno</label
-        ><select
+        ><AppSelect
           id="period-year"
           v-model.number="year"
-          class="py-2 border border-control-border text-lime bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control min-w-17 xs:text-xs md:pl-2.5 md:text-sm md:min-w-[85px]"
-        >
-          <option class="text-foreground bg-control" v-for="y in years" :key="y" :value="y">
-            {{ y }}
-          </option>
-        </select></template
+          class="min-w-17 text-lime md:min-w-21"
+          :options="yearOptions"
+        /></template
       >
       <template v-if="mode === 'month'"
         ><label class="sr-only" for="period-month">Mese</label
-        ><select
+        ><AppSelect
           id="period-month"
           v-model.number="month"
-          class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-2 text-xs max-w-full select-control xs:text-xs md:pl-2.5 md:text-sm"
-        >
-          <option
-            class="text-foreground bg-control"
-            v-for="m in months"
-            :key="m.value"
-            :value="m.value"
-          >
-            {{ m.label }}
-          </option>
-        </select></template
+          :options="months"
+        /></template
       >
       <template v-if="mode === 'custom'"
         ><label class="flex items-center gap-2 text-xs text-muted md:text-xs"
@@ -69,13 +60,10 @@ const months = Array.from({ length: 12 }, (_, i) => ({
     </div>
     <label class="flex items-center gap-0 text-mint md:gap-2"
       ><AppIcon class="hidden md:block" name="filter" :size="15" /><span class="sr-only">Sport</span
-      ><select
+      ><AppSelect
         v-model="sport"
-        class="py-2 border border-control-border text-control-text bg-control min-h-10 rounded-md pl-0 text-xs max-w-full select-control xs:pl-1 xs:text-xs md:pl-2.5 md:text-sm"
-      >
-        <option class="text-foreground bg-control" value="">Tutti gli sport</option>
-        <option class="text-foreground bg-control" v-for="s in sports" :key="s">{{ s }}</option>
-      </select></label
+        :options="sportOptions"
+      /></label
     >
     <p v-if="!valid" class="w-full text-error text-xs leading-relaxed" role="alert">
       Inserisci un intervallo di date valido.
