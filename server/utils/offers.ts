@@ -1,7 +1,7 @@
 import { createError } from 'h3'
 import type { H3Event } from 'h3'
 import type { z } from 'zod'
-import type { Offer, OfferPage, StatisticsSource } from '../../shared/types/offer'
+import type { OfferPage } from '../../shared/types/offer'
 import { archiveSchema, filterSchema } from '../../shared/utils/validation'
 
 export function parseInput<T>(schema: z.ZodType<T>, value: unknown): T {
@@ -32,19 +32,13 @@ function filterQuery<
   if (filters.sport) query = query.eq('sport', filters.sport)
   return query
 }
-export async function listOffers(
-  event: H3Event,
-  input: unknown,
-  admin = false,
-): Promise<OfferPage> {
+export async function listOffers(event: H3Event, input: unknown): Promise<OfferPage> {
   const filters = parseInput(archiveSchema, input),
     pageSize = 25
-  const db = admin ? await requireAdmin(event) : publicDatabase(event)
+  const db = await requireAdmin(event)
   let query = db.from('offers').select('*', { count: 'exact' })
   query =
-    admin && filters.deleted === 'true'
-      ? query.not('deleted_at', 'is', null)
-      : query.is('deleted_at', null)
+    filters.deleted === 'true' ? query.not('deleted_at', 'is', null) : query.is('deleted_at', null)
   query = filterQuery(query, filters)
   if (filters.outcome) query = query.eq('outcome', filters.outcome)
   if (filters.search) {
@@ -57,21 +51,4 @@ export async function listOffers(
     .range((filters.page - 1) * pageSize, filters.page * pageSize - 1)
   if (error) databaseError(error)
   return { offers: data ?? [], total: count ?? 0, page: filters.page, pageSize }
-}
-export async function statisticsSource(event: H3Event, input: unknown): Promise<StatisticsSource> {
-  const filters = parseInput(filterSchema, input)
-  const db = publicDatabase(event),
-    offers: Offer[] = []
-  // Fetch every row; the API's default 1,000-row limit must not truncate statistics.
-  for (let offset = 0; ; offset += 1000) {
-    const query = filterQuery(db.from('offers').select('*').is('deleted_at', null), filters)
-    const { data, error } = await query
-      .order('date')
-      .order('id')
-      .range(offset, offset + 999)
-    if (error) databaseError(error)
-    offers.push(...(data ?? []))
-    if (!data || data.length < 1000) break
-  }
-  return { offers }
 }

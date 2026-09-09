@@ -1,4 +1,3 @@
-import { createClient } from '@supabase/supabase-js'
 import { createServerClient } from '@supabase/ssr'
 import { createError, getHeader, getRequestURL, parseCookies, setCookie, setHeader } from 'h3'
 import type { H3Event } from 'h3'
@@ -13,12 +12,6 @@ function credentials(event: H3Event) {
     })
   }
   return { url: config.public.supabaseUrl, key: config.public.supabasePublishableKey }
-}
-export function publicDatabase(event: H3Event) {
-  const { url, key } = credentials(event)
-  return createClient<Database>(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
-  })
 }
 export function sessionDatabase(event: H3Event) {
   const { url, key } = credentials(event)

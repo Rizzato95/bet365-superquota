@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { OfferPage } from '#shared/types/offer'
+import { archiveSchema } from '#shared/utils/validation'
 usePageSeo({
   title: 'Archivio superquote bet365',
   description:
@@ -32,7 +33,38 @@ const query = computed(() => ({
   search: debouncedSearch.value,
   outcome: outcome.value,
 }))
-const { data, status, error, refresh } = useFetch<OfferPage>('/api/offers', { query, lazy: true })
+const { data, status, error, refresh } = useAsyncData<OfferPage>(
+  'archive-offers',
+  async () => {
+    const parsed = archiveSchema.safeParse(query.value)
+    if (!parsed.success) throw new Error('Filtri non validi. Riprova.')
+
+    const filters = parsed.data
+    const db = usePublicDatabase()
+    let offersQuery = db.from('offers').select('*', { count: 'exact' }).is('deleted_at', null)
+    if (filters.from) offersQuery = offersQuery.gte('date', filters.from)
+    if (filters.to) offersQuery = offersQuery.lte('date', filters.to)
+    if (filters.sport) offersQuery = offersQuery.eq('sport', filters.sport)
+    if (filters.outcome) offersQuery = offersQuery.eq('outcome', filters.outcome)
+    if (filters.search) {
+      const literal = filters.search.replace(/[\\%_]/g, '\\$&').replace(/"/g, '\\"')
+      offersQuery = offersQuery.or(`event.ilike."%${literal}%",market.ilike."%${literal}%"`)
+    }
+    const pageSize = 25
+    const { data, count, error } = await offersQuery
+      .order('date', { ascending: false })
+      .order('id', { ascending: false })
+      .range((filters.page - 1) * pageSize, filters.page * pageSize - 1)
+    if (error) throw new Error('Impossibile caricare l’archivio. Riprova.')
+
+    return { offers: data ?? [], total: count ?? 0, page: filters.page, pageSize }
+  },
+  {
+    lazy: true,
+    server: false,
+    watch: [query],
+  },
+)
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">

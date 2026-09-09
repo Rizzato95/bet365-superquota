@@ -1,1 +1,1 @@
-export default defineEventHandler((event) => listOffers(event, getQuery(event), true))
+export default defineEventHandler((event) => listOffers(event, getQuery(event)))
