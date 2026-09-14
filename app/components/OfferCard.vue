@@ -23,11 +23,11 @@ const sportIcons: Record<string, string> = {
     <h3 class="text-base leading-tight font-semibold tracking-tight md:text-sm">
       {{ offer.event }}
     </h3>
-    <p class="whitespace-pre-line wrap-anywhere text-sm text-mint leading-relaxed mt-2 min-h-0 mb-1 md:text-xs md:mb-0">
+    <p class="whitespace-pre-line wrap-anywhere text-sm text-mint leading-relaxed mt-2 min-h-0 mb-5 md:text-xs md:mb-4.5">
       {{ offer.market }}
     </p>
     <div
-      class="p-3 -mx-1.5 flex justify-between gap-2.5 items-center bg-[#141b16aa] mt-4 mb-0 rounded-lg flex-nowrap md:px-2.5 md:py-2.5 md:-mx-2 md:mt-4.5 md:flex-wrap xl:flex-nowrap">
+      class="p-3 -mx-1.5 flex justify-between gap-2.5 items-center bg-[#141b16aa] mt-auto mb-0 rounded-lg flex-nowrap md:px-2.5 md:py-2.5 md:-mx-2 md:flex-wrap xl:flex-nowrap">
       <span class="text-lime text-xs tracking-tight font-bold flex items-center gap-0.5 md:text-xs">SUPER<span
           class="text-white">QUOTA</span>
         <AppIcon name="boost" :size="17" />
