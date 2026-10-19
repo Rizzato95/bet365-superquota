@@ -20,7 +20,7 @@ export type Database = {
           original_odds: number | null
           outcome: 'pending' | 'won' | 'lost' | 'void'
           source_key: string | null
-          sport: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
+          sport: 'Calcio' | 'Tennis' | 'Basket' | 'Football Americano' | 'Motori' | 'Altro'
           updated_at: string
         }
         Insert: {
@@ -34,7 +34,7 @@ export type Database = {
           original_odds?: number | null
           outcome?: 'pending' | 'won' | 'lost' | 'void'
           source_key?: string | null
-          sport: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
+          sport: 'Calcio' | 'Tennis' | 'Basket' | 'Football Americano' | 'Motori' | 'Altro'
           updated_at?: string
         }
         Update: {
@@ -48,7 +48,7 @@ export type Database = {
           original_odds?: number | null
           outcome?: 'pending' | 'won' | 'lost' | 'void'
           source_key?: string | null
-          sport?: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
+          sport?: 'Calcio' | 'Tennis' | 'Basket' | 'Football Americano' | 'Motori' | 'Altro'
           updated_at?: string
         }
         Relationships: []
@@ -62,7 +62,7 @@ export type Database = {
     }
     Enums: {
       offer_outcome: 'pending' | 'won' | 'lost' | 'void'
-      offer_sport: 'Calcio' | 'Tennis' | 'Basket' | 'Motori' | 'Altro'
+      offer_sport: 'Calcio' | 'Tennis' | 'Basket' | 'Football Americano' | 'Motori' | 'Altro'
     }
     CompositeTypes: {
       [_ in never]: never

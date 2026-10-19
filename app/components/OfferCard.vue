@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { Offer } from '#shared/types/offer'
+import type { Offer, Sport } from '#shared/types/offer'
 import { dateLabel, quota, money } from '#shared/utils/format'
 import { settle } from '#shared/utils/analytics'
 const props = withDefaults(defineProps<{ offer: Offer; stake?: number }>(), { stake: 100 })
 const net = computed(() => settle(props.offer, props.stake).profit / 100)
-const sportIcons: Record<string, string> = {
+const sportIcons: Record<Sport, string> = {
   Calcio: '⚽',
   Tennis: '🎾',
   Basket: '🏀',
+  'Football Americano': '🏈',
   Motori: '🏁',
   Altro: '◉',
 }
