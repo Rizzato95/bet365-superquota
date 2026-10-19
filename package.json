@@ -12,8 +12,6 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
-    "test": "vitest run",
-    "test:rls": "vitest run tests/rls.test.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -31,11 +29,9 @@
     "zod": "4.5.4"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "0.5.8",
     "@types/node": "24.13.3",
     "prettier": "3.9.6",
     "typescript": "5.9.3",
-    "vitest": "5.0.0",
     "vue-tsc": "3.3.11"
   }
 }
