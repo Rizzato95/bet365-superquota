@@ -75,7 +75,8 @@ const { data, status, error, refresh } = await useAsyncData<OfferPage>(
   computed(() => `archive-offers:${JSON.stringify(query.value)}`),
   async () => {
     const parsed = archiveSchema.safeParse(query.value)
-    if (!parsed.success) throw new Error('Filtri non validi. Riprova.')
+    if (!parsed.success)
+      throw createError({ statusCode: 400, statusMessage: 'Filtri non validi. Riprova.' })
 
     const filters = parsed.data
     const db = usePublicDatabase()
@@ -114,7 +115,7 @@ watchEffect(() => {
     throw createError({ statusCode: 404, statusMessage: 'Pagina non trovata' })
   }
 })
-if (import.meta.server && error.value) setResponseStatus(503)
+if (import.meta.server && error.value) setResponseStatus(error.value.statusCode === 400 ? 400 : 503)
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">

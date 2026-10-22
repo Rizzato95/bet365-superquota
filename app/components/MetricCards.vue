@@ -14,7 +14,7 @@ defineProps<{ stats: Analysis; stake: number }>()
         Utile netto <AppIcon class="text-mint w-4 md:w-4.5" name="trend" :size="18" />
       </div>
       <strong
-        class="mx-0 tabular-nums block text-2xl tracking-tight font-semibold mt-3.5 mb-2.5 leading-tight whitespace-nowrap relative z-1 md:tracking-tight md:mt-3 md:mb-2"
+        class="metric-profit mx-0 tabular-nums block text-2xl tracking-tight font-semibold mt-3.5 mb-2.5 leading-tight whitespace-normal wrap-anywhere relative z-1 md:tracking-tight md:mt-3 md:mb-2"
         :class="stats.profit < 0 ? 'text-negative' : 'text-mint'"
         :style="{ '--amount-length': money(stats.profit, true).length }"
         >{{ money(stats.profit, true) }}</strong
@@ -72,10 +72,10 @@ defineProps<{ stats: Analysis; stake: number }>()
         <AppIcon class="text-icon-muted w-4 md:w-4.5" name="archive" :size="18" />
       </div>
       <strong
-        class="mx-0 tabular-nums block text-2xl tracking-tight font-semibold mt-3.5 mb-2.5 leading-tight whitespace-nowrap relative z-1 xs:text-2xl md:text-2xl md:tracking-tight md:mt-3 md:mb-2 xl:text-3xl 2xl:text-4xl"
+        class="mx-0 tabular-nums flex flex-wrap items-center gap-x-1.5 gap-y-1 text-2xl tracking-tight font-semibold mt-3.5 mb-2.5 leading-tight relative z-1 xs:text-2xl md:text-2xl md:tracking-tight md:mt-3 md:mb-2 xl:text-3xl 2xl:text-4xl"
         >{{ stats.total
         }}<span
-          class="p-1 border border-[#43543f] inline-block text-xs tracking-tight text-mint ml-1.5 rounded-lg align-middle xs:text-xs md:hidden md:text-xs md:ml-2.5 xl:inline-block"
+          class="p-1 border border-[#43543f] inline-block text-xs tracking-tight text-mint rounded-lg align-middle xs:text-xs md:hidden md:text-xs xl:inline-block"
           >SUPERQUOTE</span
         ></strong
       ><span
@@ -88,3 +88,9 @@ defineProps<{ stats: Analysis; stake: number }>()
     </article>
   </div>
 </template>
+
+<style scoped>
+.metric-profit {
+  font-size: clamp(1rem, calc(100cqi / (var(--amount-length) * 0.65)), 2rem);
+}
+</style>
