@@ -5,7 +5,7 @@ usePageSeo({
     'Consulta l’andamento storico delle superquote bet365: risultati, rendimento, profitto cumulativo e statistiche aggiornate.',
   path: '/',
 })
-const { data, error, status, refresh, stats, offers, comparison } = useStatistics()
+const { data, error, status, refresh, stats, offers, comparison } = await useStatistics()
 const latest = computed(() =>
   [...offers.value]
     .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id))
@@ -22,11 +22,21 @@ const latest = computed(() =>
     </div>
   </div>
   <PeriodFilters />
-  <DataState v-if="error || !data" :error="!!error" :loading="status === 'pending'" @retry="refresh()" />
-  <div v-else :class="{ 'pointer-events-none opacity-55': status === 'pending' }" :aria-busy="status === 'pending'">
+  <DataState
+    v-if="error || !data"
+    :error="!!error"
+    :loading="status === 'pending'"
+    @retry="refresh()"
+  />
+  <div
+    v-else
+    :class="{ 'pointer-events-none opacity-55': status === 'pending' }"
+    :aria-busy="status === 'pending'"
+  >
     <MetricCards :stats="stats" :stake="100" />
     <div
-      class="grid grid-cols-1 gap-4.5 items-stretch mb-7.5 md:grid-cols-[minmax(0,_1.9fr)_minmax(250px,_1fr)] md:gap-3.5 md:mb-8.5 lg:grid-cols-[minmax(0,_1.8fr)_minmax(240px,_1fr)] xl:grid-cols-[minmax(0,_2.25fr)_minmax(260px,_1fr)] xl:gap-5">
+      class="grid grid-cols-1 gap-4.5 items-stretch mb-7.5 md:grid-cols-[minmax(0,_1.9fr)_minmax(250px,_1fr)] md:gap-3.5 md:mb-8.5 lg:grid-cols-[minmax(0,_1.8fr)_minmax(240px,_1fr)] xl:grid-cols-[minmax(0,_2.25fr)_minmax(260px,_1fr)] xl:gap-5"
+    >
       <PerformancePanel :stats="stats" :comparison="comparison" :stake="100" />
       <MonthlyResults :stats="stats" />
     </div>
@@ -40,9 +50,10 @@ const latest = computed(() =>
             Le scommesse più recenti e i loro risultati
           </p>
         </div>
-        <NuxtLink to="/archive"
-          class="flex items-center gap-1 text-mint text-xs whitespace-nowrap md:gap-2 md:text-xs hover:text-mint">Vedi
-          archivio
+        <NuxtLink
+          to="/archive"
+          class="flex items-center gap-1 text-mint text-xs whitespace-nowrap md:gap-2 md:text-xs hover:text-mint"
+          >Vedi archivio
           <AppIcon name="arrow" :size="17" />
         </NuxtLink>
       </div>

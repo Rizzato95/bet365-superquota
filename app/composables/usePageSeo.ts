@@ -1,8 +1,8 @@
 type PageSeo = {
-  title: string
+  title: MaybeRefOrGetter<string>
   description: string
-  path: '/' | '/archive' | '/simulator' | '/management'
-  noindex?: boolean
+  path: MaybeRefOrGetter<string>
+  noindex?: MaybeRefOrGetter<boolean>
 }
 
 function siteOrigin(siteUrl: string) {
@@ -13,30 +13,32 @@ export function usePageSeo({ title, description, path, noindex = false }: PageSe
   const runtimeConfig = useRuntimeConfig()
   const appConfig = useAppConfig()
   const origin = siteOrigin(runtimeConfig.public.siteUrl)
-  const url = `${origin}${path}`
+  const url = computed(() => `${origin}${toValue(path)}`)
   const socialImage = `${origin}/social-card.webp`
-  const robots = noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'
+  const robots = computed(() =>
+    toValue(noindex) ? 'noindex, follow' : 'index, follow, max-image-preview:large',
+  )
 
   useSeoMeta({
-    title,
+    title: () => toValue(title),
     description,
     robots,
-    ogTitle: `${title} | ${appConfig.brand.name}`,
+    ogTitle: () => `${toValue(title)} | ${appConfig.brand.name}`,
     ogDescription: description,
     ogType: 'website',
     ogUrl: url,
     ogSiteName: appConfig.brand.name,
     ogLocale: 'it_IT',
     ogImage: socialImage,
-    ogImageAlt: `${appConfig.brand.name} · ${title}`,
+    ogImageAlt: () => `${appConfig.brand.name} · ${toValue(title)}`,
     ogImageWidth: '1731',
     ogImageHeight: '909',
     twitterCard: 'summary_large_image',
-    twitterTitle: `${title} | ${appConfig.brand.name}`,
+    twitterTitle: () => `${toValue(title)} | ${appConfig.brand.name}`,
     twitterDescription: description,
     twitterImage: socialImage,
-    twitterImageAlt: `${appConfig.brand.name} · ${title}`,
+    twitterImageAlt: () => `${appConfig.brand.name} · ${toValue(title)}`,
   })
 
-  useHead({ link: [{ key: 'canonical', rel: 'canonical', href: url }] })
+  useHead(() => ({ link: [{ key: 'canonical', rel: 'canonical', href: url.value }] }))
 }

@@ -2,9 +2,10 @@ import type { Offer, StatisticsSource } from '#shared/types/offer'
 import { analyze, compareOdds } from '#shared/utils/analytics'
 import { filterSchema } from '#shared/utils/validation'
 
-export function useStatistics(stake: Ref<number> = ref(100)) {
+export async function useStatistics(stake: Ref<number> = ref(100)) {
   const period = usePeriod()
-  const result = useAsyncData<StatisticsSource>(
+  const event = useRequestEvent()
+  const result = await useAsyncData<StatisticsSource>(
     'statistics',
     async () => {
       const parsed = filterSchema.safeParse(period.filters.value)
@@ -30,11 +31,14 @@ export function useStatistics(stake: Ref<number> = ref(100)) {
       return { offers }
     },
     {
-      lazy: true,
-      server: false,
+      server: true,
       watch: [period.filters],
     },
   )
+  if (import.meta.server && result.error.value && event) {
+    const { setResponseStatus } = await import('h3')
+    setResponseStatus(event, 503)
+  }
   const offers = computed(() => result.data.value?.offers ?? [])
   const stats = computed(() =>
     analyze(offers.value, stake.value, 'boosted', period.filters.value.from),

@@ -9,8 +9,12 @@ export function usePublicDatabase() {
   if (!supabaseUrl || !supabasePublishableKey)
     throw new Error('Database non configurato. Riprova più tardi.')
 
-  client ??= createClient<Database>(supabaseUrl, supabasePublishableKey, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
-  })
+  const createPublicClient = () =>
+    createClient<Database>(supabaseUrl, supabasePublishableKey, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    })
+  // Server requests never share a client or carry an administrator session.
+  if (import.meta.server) return createPublicClient()
+  client ??= createPublicClient()
   return client
 }

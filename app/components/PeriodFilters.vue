@@ -7,64 +7,42 @@ const months = Array.from({ length: 12 }, (_, i) => ({
   label: new Intl.DateTimeFormat('it', { month: 'long' }).format(new Date(2026, i, 1)),
 }))
 const periodModes = [
+  { value: 'all', label: 'Tutto lo storico' },
   { value: 'year', label: 'Anno completo' },
   { value: 'month', label: 'Mese' },
   { value: 'custom', label: 'Personalizzato' },
 ]
 const yearOptions = years.map((value) => ({ value, label: String(value) }))
-const sportOptions = [{ value: '', label: 'Tutti gli sport' }, ...sports.map((value) => ({ value, label: value }))]
+const sportOptions = [
+  { value: '', label: 'Tutti gli sport' },
+  ...sports.map((value) => ({ value, label: value })),
+]
 </script>
 <template>
   <div
-    class="flex gap-1.5 flex-wrap justify-between items-center border-b border-b-line pb-4 mb-4.5 md:gap-2.5 md:pb-5.5 md:mb-6"
-  >
+    class="flex gap-1.5 flex-wrap justify-between items-center border-b border-b-line pb-4 mb-4.5 md:gap-2.5 md:pb-5.5 md:mb-6">
     <div class="flex items-center gap-1.5 flex-wrap md:gap-2">
       <AppIcon name="calendar" :size="17" class="text-muted mr-1.5 hidden md:block" />
-      <label class="sr-only" for="period-mode">Tipo di periodo</label
-      ><AppSelect
-        id="period-mode"
-        v-model="mode"
-        :options="periodModes"
-      />
-      <template v-if="mode !== 'custom'"
-        ><label class="sr-only" for="period-year">Anno</label
-        ><AppSelect
-          id="period-year"
-          v-model.number="year"
-          class="min-w-17 text-lime md:min-w-21"
-          :options="yearOptions"
-        /></template
-      >
-      <template v-if="mode === 'month'"
-        ><label class="sr-only" for="period-month">Mese</label
-        ><AppSelect
-          id="period-month"
-          v-model.number="month"
-          :options="months"
-        /></template
-      >
-      <template v-if="mode === 'custom'"
-        ><label class="flex items-center gap-2 text-xs text-muted md:text-xs"
-          >Dal<input
+      <label class="sr-only" for="period-mode">Tipo di periodo</label>
+      <AppSelect id="period-mode" v-model="mode" :options="periodModes" />
+      <template v-if="mode === 'year' || mode === 'month'"><label class="sr-only" for="period-year">Anno</label>
+        <AppSelect id="period-year" v-model.number="year" class="min-w-17 text-lime md:min-w-21"
+          :options="yearOptions" />
+      </template>
+      <template v-if="mode === 'month'"><label class="sr-only" for="period-month">Mese</label>
+        <AppSelect id="period-month" v-model.number="month" :options="months" />
+      </template>
+      <template v-if="mode === 'custom'"><label class="flex items-center gap-2 text-xs text-muted md:text-xs">Dal<input
             class="p-2 border border-control-border min-w-0 text-xs rounded-md bg-control min-h-10 md:text-sm"
-            v-model="from"
-            aria-label="Data iniziale"
-            type="date" /></label
-        ><label class="flex items-center gap-2 text-xs text-muted md:text-xs"
-          >Al<input
+            v-model="from" aria-label="Data iniziale" type="date" /></label><label
+          class="flex items-center gap-2 text-xs text-muted md:text-xs">Al<input
             class="p-2 border border-control-border min-w-0 text-xs rounded-md bg-control min-h-10 md:text-sm"
-            v-model="to"
-            aria-label="Data finale"
-            type="date" /></label
-      ></template>
+            v-model="to" aria-label="Data finale" type="date" /></label></template>
     </div>
-    <label class="flex items-center gap-0 text-mint md:gap-2"
-      ><AppIcon class="hidden md:block" name="filter" :size="15" /><span class="sr-only">Sport</span
-      ><AppSelect
-        v-model="sport"
-        :options="sportOptions"
-      /></label
-    >
+    <label class="flex items-center gap-0 text-mint md:gap-2">
+      <AppIcon class="hidden md:block" name="filter" :size="15" /><span class="sr-only">Sport</span>
+      <AppSelect v-model="sport" :options="sportOptions" />
+    </label>
     <p v-if="!valid" class="w-full text-error text-xs leading-relaxed" role="alert">
       Inserisci un intervallo di date valido.
     </p>

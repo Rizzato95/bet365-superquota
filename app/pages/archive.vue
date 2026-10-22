@@ -1,40 +1,78 @@
 <script setup lang="ts">
 import type { OfferPage } from '#shared/types/offer'
 import { archiveSchema } from '#shared/utils/validation'
+const route = useRoute()
+const router = useRouter()
+const { filters } = usePeriod()
+const page = computed(() => {
+  const raw = route.query.page
+  if (raw === undefined) return 1
+  if (typeof raw !== 'string' || !/^[1-9]\d*$/.test(raw) || Number(raw) > 100000)
+    throw createError({ statusCode: 404, statusMessage: 'Pagina non trovata' })
+  return Number(raw)
+})
+const supportedFilters = ['mode', 'year', 'month', 'from', 'to', 'sport', 'search', 'outcome']
+const filtered = computed(() => supportedFilters.some((key) => route.query[key] !== undefined))
+function pageTo(nextPage: number) {
+  const query: Record<string, string> = {}
+  for (const key of supportedFilters) {
+    const value = route.query[key]
+    if (typeof value === 'string' && value) query[key] = value
+  }
+  if (nextPage > 1) query.page = String(nextPage)
+  return { path: '/archive', query }
+}
+const canonicalPath = computed(() => {
+  const params = new URLSearchParams(pageTo(page.value).query)
+  return `/archive${params.size ? `?${params}` : ''}`
+})
 usePageSeo({
-  title: 'Archivio superquote bet365',
+  title: () => `Archivio superquote bet365${page.value > 1 ? ` · Pagina ${page.value}` : ''}`,
   description:
     'Esplora tutte le superquote bet365 archiviate, con ricerca e filtri per periodo, sport ed esito.',
-  path: '/archive',
+  path: canonicalPath,
+  noindex: filtered,
 })
-const { filters } = usePeriod()
-const page = ref(1),
-  search = ref(''),
-  debouncedSearch = ref(''),
-  outcome = ref('')
+function queryValue(name: string) {
+  return typeof route.query[name] === 'string' ? route.query[name] : ''
+}
+const search = ref(queryValue('search'))
+const debouncedSearch = computed(() => queryValue('search'))
 let timer: ReturnType<typeof setTimeout> | undefined
+watch(
+  () => route.query.search,
+  () => {
+    search.value = queryValue('search')
+  },
+)
 watch(search, (value) => {
   clearTimeout(timer)
+  if (value === queryValue('search')) return
   timer = setTimeout(() => {
-    debouncedSearch.value = value
+    void router.replace({
+      path: '/archive',
+      query: { ...route.query, search: value || undefined, page: undefined },
+    })
   }, 250)
 })
 onBeforeUnmount(() => clearTimeout(timer))
-watch(
-  [filters, debouncedSearch, outcome],
-  () => {
-    page.value = 1
+const outcome = computed({
+  get: () => queryValue('outcome'),
+  set: (value: string) => {
+    void router.replace({
+      path: '/archive',
+      query: { ...route.query, outcome: value || undefined, page: undefined },
+    })
   },
-  { flush: 'sync' },
-)
+})
 const query = computed(() => ({
   ...filters.value,
   page: page.value,
   search: debouncedSearch.value,
   outcome: outcome.value,
 }))
-const { data, status, error, refresh } = useAsyncData<OfferPage>(
-  'archive-offers',
+const { data, status, error, refresh } = await useAsyncData<OfferPage>(
+  computed(() => `archive-offers:${JSON.stringify(query.value)}`),
   async () => {
     const parsed = archiveSchema.safeParse(query.value)
     if (!parsed.success) throw new Error('Filtri non validi. Riprova.')
@@ -55,16 +93,28 @@ const { data, status, error, refresh } = useAsyncData<OfferPage>(
       .order('date', { ascending: false })
       .order('id', { ascending: false })
       .range((filters.page - 1) * pageSize, filters.page * pageSize - 1)
+    if (error?.code === 'PGRST103')
+      throw createError({ statusCode: 404, statusMessage: 'Pagina non trovata' })
     if (error) throw new Error('Impossibile caricare l’archivio. Riprova.')
 
     return { offers: data ?? [], total: count ?? 0, page: filters.page, pageSize }
   },
   {
-    lazy: true,
-    server: false,
-    watch: [query],
+    server: true,
   },
 )
+watchEffect(() => {
+  if (error.value?.statusCode === 404)
+    throw createError({ statusCode: 404, statusMessage: 'Pagina non trovata' })
+  if (
+    status.value === 'success' &&
+    data.value?.page === page.value &&
+    page.value > Math.max(1, Math.ceil(data.value.total / data.value.pageSize))
+  ) {
+    throw createError({ statusCode: 404, statusMessage: 'Pagina non trovata' })
+  }
+})
+if (import.meta.server && error.value) setResponseStatus(503)
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
@@ -95,7 +145,8 @@ const { data, status, error, refresh } = useAsyncData<OfferPage>(
   </div>
   <PaginationBar
     v-if="data && data.total > 0"
-    v-model="page"
+    :model-value="page"
+    :page-to="pageTo"
     :total="data.total"
     :page-size="data.pageSize"
     :loading="status === 'pending'"

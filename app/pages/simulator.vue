@@ -17,7 +17,7 @@ watch(enteredStake, (value) => {
   const parsed = stakeSchema.safeParse(value.replace(',', '.'))
   if (parsed.success) stake.value = parsed.data
 })
-const { data, status, error, refresh, stats, comparison } = useStatistics(stake)
+const { data, status, error, refresh, stats, comparison } = await useStatistics(stake)
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
@@ -145,29 +145,5 @@ const { data, status, error, refresh, stats, comparison } = useStatistics(stake)
       <PerformancePanel :stats="stats" :comparison="comparison" :stake="stake" />
       <MonthlyResults :stats="stats" />
     </div>
-    <details class="group px-4.5 py-0 border border-panel-border bg-surface rounded-lg md:px-5.5">
-      <summary
-        class="px-0 py-5 cursor-pointer flex gap-2.5 items-center text-mint text-xs list-none md:text-sm [&::-webkit-details-marker]:hidden"
-      >
-        <AppIcon class="last:ml-auto group-open:last:rotate-90" name="help" :size="18" />Come
-        vengono calcolati i risultati
-        <AppIcon class="last:ml-auto group-open:last:rotate-90" name="right" :size="17" />
-      </summary>
-      <div class="px-0 pt-0 pb-6 text-xs leading-loose text-muted md:text-sm">
-        <p>
-          Una vincita restituisce la puntata moltiplicata per la quota. L’utile è l’incasso meno la
-          puntata. Una perdita vale −{{ money(stake) }}, un rimborso ha utile zero. Ogni incasso
-          viene arrotondato ai centesimi prima della somma.
-        </p>
-        <p class="mt-3">
-          ROI = utile netto / totale puntato. Percentuale di vittorie = vinte / (vinte + perse). Le
-          scommesse in attesa e rimborsate non entrano in questi due indicatori. Nel confronto
-          utilizziamo soltanto gli eventi con entrambe le quote.
-        </p>
-        <p class="mt-3">
-          La simulazione descrive il passato e non è una previsione dei risultati futuri.
-        </p>
-      </div>
-    </details>
   </div>
 </template>

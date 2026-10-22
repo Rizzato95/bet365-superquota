@@ -36,4 +36,4 @@ export type OfferPage = {
   pageSize: number
 }
 export type StatisticsSource = { offers: Offer[] }
-export type PeriodFilter = { from: string; to: string; sport: string }
+export type PeriodFilter = { from?: string; to?: string; sport: string }

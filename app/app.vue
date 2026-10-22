@@ -128,6 +128,7 @@ useHead({
           >
           · Progetto indipendente, non affiliato a bet365.</span
         >
+        <DataContext />
       </footer>
     </main>
     <nav
