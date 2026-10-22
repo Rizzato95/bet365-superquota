@@ -31,3 +31,17 @@ Le informazioni pubblicate descrivono lo storico delle superquote registrate nel
 ## Contatti
 
 Progetto di [Marco Rizzato](https://www.marcorizzato.it)
+
+## Rendering e indicizzazione
+
+Le pagine pubbliche caricano i dati con SSR usando esclusivamente il client Supabase pubblico, senza sessioni amministrative. Non è necessario modificare RLS o aggiungere chiavi privilegiate. Un errore di lettura restituisce HTTP 503 invece di presentare una pagina vuota come disponibile.
+
+L’archivio mostra per impostazione predefinita tutto lo storico, anche di anni precedenti. La paginazione espone link HTML (`/archive?page=2`, ecc.) e canonical specifici per ogni pagina. Periodo, sport, ricerca ed esito sono conservati nei parametri URL; queste viste filtrate usano `noindex, follow`. Le pagine inesistenti e i numeri di pagina fuori intervallo restituiscono HTTP 404.
+
+Dopo il deploy, usare il test URL pubblicato di Search Console per controllare HTML e screenshot, poi richiedere l’indicizzazione di homepage, archivio e simulatore. La sitemap resta `/sitemap.xml`; l’indicizzazione è una decisione di Google e non è garantita dal deploy.
+
+### Verifica SEO HTTP
+
+Eseguire `pnpm typecheck` e `pnpm build`. Avviare la build con le variabili Supabase pubbliche configurate, per esempio `node --env-file=.env .output/server/index.mjs`.
+
+Con il server attivo, eseguire `SEO_BASE_URL=http://127.0.0.1:3000 node scripts/check-seo.mjs`. Il controllo segue tutti i link di paginazione senza JavaScript e verifica contenuti SSR, canonical, direttive robots, sitemap e 404. Il dataset deve contenere almeno due pagine di offerte. `SEO_CANONICAL_ORIGIN` permette di specificare il dominio canonico atteso (predefinito: `https://bet365-superquota.netlify.app`).
