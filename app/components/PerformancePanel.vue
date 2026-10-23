@@ -41,13 +41,16 @@ const compare = ref(false)
         /><span>Confronta quote</span></label
       >
     </div>
-    <div v-if="!stats.settled && !stats.voids"
+    <div
+      v-if="!stats.settled && !stats.voids"
       class="p-7.5 flex items-center justify-center text-center flex-col gap-3.5 min-h-70 text-mint"
     >
       <AppIcon name="chart" :size="36" /><strong class="text-base text-heading font-medium"
         >Nessun risultato da mostrare</strong
       >
-      <p class="text-sm leading-relaxed">Il grafico apparirà quando ci saranno scommesse concluse.</p>
+      <p class="text-sm leading-relaxed">
+        Il grafico apparirà quando ci saranno scommesse concluse.
+      </p>
     </div>
     <ClientOnly v-else
       ><ProfitChart

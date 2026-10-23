@@ -28,6 +28,7 @@ const adminQuery = computed(() => ({
   deleted: String(removed.value),
 }))
 const { data, status, error, execute } = await useFetch<OfferPage>('/api/admin/offers', {
+  key: offerDataKeys.management,
   query: adminQuery,
   immediate: false,
   watch: false,
@@ -93,8 +94,8 @@ async function login() {
     })
     password.value = ''
     await refreshSession()
-  } catch (error: any) {
-    loginError.value = error.data?.statusMessage || 'Accesso non riuscito. Riprova.'
+  } catch (error: unknown) {
+    loginError.value = httpErrorMessage(error, 'Accesso non riuscito. Riprova.')
   } finally {
     loggingIn.value = false
   }

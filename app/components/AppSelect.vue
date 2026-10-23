@@ -15,7 +15,11 @@ function updateValue(event: Event) {
 </script>
 
 <template>
-  <select :value="model" :class="variant === 'form' ? 'form-select' : 'filter-select'" @change="updateValue">
+  <select
+    :value="model"
+    :class="variant === 'form' ? 'form-select' : 'filter-select'"
+    @change="updateValue"
+  >
     <option v-for="option in options" :key="option.value" :value="option.value">
       {{ option.label }}
     </option>

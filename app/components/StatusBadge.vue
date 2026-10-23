@@ -13,7 +13,8 @@ const icons = { won: 'check', lost: 'close', pending: 'pending', void: 'restore'
 <template>
   <span
     class="px-1.5 py-1 inline-flex items-center gap-1 rounded text-xs font-medium whitespace-nowrap md:px-1.5 md:py-1 md:text-xs"
-    :class="colors[outcome]">
+    :class="colors[outcome]"
+  >
     <AppIcon :name="icons[outcome]" :size="12" />{{ outcomeLabels[outcome] }}
   </span>
 </template>

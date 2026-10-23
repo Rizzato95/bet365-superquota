@@ -17,20 +17,18 @@ export function useOfferMutations(options: MutationOptions = {}) {
     try {
       await request()
       options.onSuccess?.(action)
-      await refreshNuxtData()
+      await refreshOfferData()
       return true
     } catch (cause: unknown) {
       if (isUnauthorizedError(cause) && options.onUnauthorized) {
         await options.onUnauthorized()
       } else {
-        const message = (cause as { data?: { statusMessage?: unknown } } | null)?.data
-          ?.statusMessage
-        error.value =
-          typeof message === 'string'
-            ? message
-            : action === 'save'
-              ? 'Salvataggio non riuscito. Riprova.'
-              : 'Operazione non riuscita. Riprova.'
+        error.value = httpErrorMessage(
+          cause,
+          action === 'save'
+            ? 'Salvataggio non riuscito. Riprova.'
+            : 'Operazione non riuscita. Riprova.',
+        )
       }
       return false
     } finally {

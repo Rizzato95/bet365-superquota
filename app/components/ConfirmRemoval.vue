@@ -2,18 +2,17 @@
 import type { Offer } from '#shared/types/offer'
 defineProps<{ offer: Offer; busy: boolean; error?: string }>()
 const emit = defineEmits<{ confirm: []; cancel: [] }>()
-const dialog = ref<HTMLDialogElement | null>(null)
-onMounted(() => dialog.value?.showModal())
-onBeforeUnmount(() => dialog.value?.close())
+const { dialog } = useDialog({ autoOpen: true })
+const titleId = useId()
 </script>
 <template>
   <dialog
     ref="dialog"
     class="p-7 m-auto border border-[#4a6349] fixed top-0 right-0 bottom-0 left-0 rounded-lg bg-[#1a291f] text-foreground w-150 max-w-[calc(100%_-_20px)] max-h-[calc(100dvh_-_20px)] overflow-auto shadow-[0_30px_100px_#0008] md:max-w-115 md:max-h-[calc(100dvh_-_40px)] backdrop:bg-[#06140cba] backdrop:backdrop-blur-[4px]"
-    aria-labelledby="remove-title"
+    :aria-labelledby="titleId"
     @cancel.prevent="!busy && emit('cancel')"
   >
-    <h2 class="text-xl leading-tight mb-3.5" id="remove-title">Rimuovere questa superquota?</h2>
+    <h2 class="text-xl leading-tight mb-3.5" :id="titleId">Rimuovere questa superquota?</h2>
     <p class="text-sm leading-loose text-mint">
       <strong>{{ offer.event }}</strong> verrà nascosta dall’archivio e dalle statistiche. Potrai
       ripristinarla dalla sezione Rimosse.

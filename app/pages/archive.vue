@@ -72,7 +72,7 @@ const query = computed(() => ({
   outcome: outcome.value,
 }))
 const { data, status, error, refresh } = await useAsyncData<OfferPage>(
-  computed(() => `archive-offers:${JSON.stringify(query.value)}`),
+  computed(() => `${offerDataKeys.archivePrefix}${JSON.stringify(query.value)}`),
   async () => {
     const parsed = archiveSchema.safeParse(query.value)
     if (!parsed.success)

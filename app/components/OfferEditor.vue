@@ -5,7 +5,8 @@ import { outcomeLabels } from '#shared/utils/format'
 import { offerSchema } from '#shared/utils/validation'
 const props = defineProps<{ offer: Offer | null }>()
 const emit = defineEmits<{ saved: []; cancel: []; sessionExpired: [] }>()
-const dialog = ref<HTMLDialogElement | null>(null)
+const { dialog } = useDialog({ autoOpen: true })
+const titleId = useId()
 const form = reactive({
   date:
     props.offer?.date ??
@@ -27,8 +28,6 @@ const {
 })
 const sportOptions = sports.map((value) => ({ value, label: value }))
 const outcomeOptions = outcomes.map((value) => ({ value, label: outcomeLabels[value] }))
-onMounted(() => dialog.value?.showModal())
-onBeforeUnmount(() => dialog.value?.close())
 async function save() {
   serverError.value = ''
   errors.value = {}
@@ -48,7 +47,7 @@ async function save() {
   <dialog
     ref="dialog"
     class="p-0 m-auto border border-[#4a6349] fixed top-0 right-0 bottom-0 left-0 rounded-lg bg-[#1a291f] text-foreground w-150 max-w-[calc(100%_-_20px)] max-h-[calc(100dvh_-_20px)] overflow-auto shadow-[0_30px_100px_#0008] md:max-w-[calc(100%_-_30px)] md:max-h-[calc(100dvh_-_40px)] backdrop:bg-[#06140cba] backdrop:backdrop-blur-[4px]"
-    aria-labelledby="editor-title"
+    :aria-labelledby="titleId"
     @cancel.prevent="!saving && emit('cancel')"
   >
     <form @submit.prevent="save">
@@ -60,7 +59,7 @@ async function save() {
             class="text-xs tracking-tight text-mint font-semibold mb-2 md:text-xs md:tracking-tight"
             >GESTIONE EVENTI</span
           >
-          <h2 class="text-xl tracking-tight font-medium md:text-xl" id="editor-title">
+          <h2 class="text-xl tracking-tight font-medium md:text-xl" :id="titleId">
             {{ offer ? 'Modifica superquota' : 'Nuova superquota' }}
           </h2>
         </div>

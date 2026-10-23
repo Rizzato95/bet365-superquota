@@ -3,38 +3,11 @@ import type { Offer } from '#shared/types/offer'
 import { money } from '#shared/utils/format'
 
 const props = defineProps<{ offers: Offer[]; stake: number; loading?: boolean }>()
-const dialog = ref<HTMLDialogElement | null>(null)
+const { dialog, open, close, closeOnBackdrop } = useDialog()
 const titleId = useId()
 const sortedOffers = computed(() =>
   [...props.offers].sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id)),
 )
-let previousOverflow: string | undefined
-function open() {
-  if (!dialog.value || dialog.value.open) return
-  previousOverflow = document.documentElement.style.overflow
-  dialog.value.showModal()
-  document.documentElement.style.overflow = 'hidden'
-}
-function restoreScroll() {
-  if (previousOverflow === undefined) return
-  document.documentElement.style.overflow = previousOverflow
-  previousOverflow = undefined
-}
-function closeOnBackdrop(event: MouseEvent) {
-  if (event.target !== dialog.value || !dialog.value) return
-  const rect = dialog.value.getBoundingClientRect()
-  if (
-    event.clientX < rect.left ||
-    event.clientX > rect.right ||
-    event.clientY < rect.top ||
-    event.clientY > rect.bottom
-  )
-    dialog.value.close()
-}
-onBeforeUnmount(() => {
-  dialog.value?.close()
-  restoreScroll()
-})
 </script>
 
 <template>
@@ -54,7 +27,6 @@ onBeforeUnmount(() => {
     ref="dialog"
     :aria-labelledby="titleId"
     class="m-auto w-full max-w-[min(70rem,calc(100%_-_32px))] max-h-[calc(100dvh_-_32px)] overflow-hidden rounded-lg border border-panel-border bg-surface p-0 text-foreground shadow-2xl backdrop:bg-[#06140cba] backdrop:backdrop-blur-[4px]"
-    @close="restoreScroll"
     @click="closeOnBackdrop"
   >
     <div class="flex max-h-[calc(100dvh_-_34px)] flex-col">
@@ -73,7 +45,7 @@ onBeforeUnmount(() => {
           type="button"
           autofocus
           class="shrink-0 rounded-md border border-action-border bg-action px-3 py-2 min-h-11 text-sm text-action-text hover:bg-action-hover"
-          @click="dialog?.close()"
+          @click="close"
         >
           Chiudi
         </button>

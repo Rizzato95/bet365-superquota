@@ -1,12 +1,12 @@
 import type { Offer, StatisticsSource } from '#shared/types/offer'
-import { analyze, compareOdds } from '#shared/utils/analytics'
+import { compareOdds } from '#shared/utils/analytics'
 import { filterSchema } from '#shared/utils/validation'
 
 export async function useStatistics(stake: Ref<number> = ref(100), search: Ref<string> = ref('')) {
   const period = usePeriod()
   const event = useRequestEvent()
   const result = await useAsyncData<StatisticsSource>(
-    'statistics',
+    offerDataKeys.statistics,
     async () => {
       const parsed = filterSchema.safeParse(period.filters.value)
       if (!parsed.success) throw new Error('Filtri non validi. Riprova.')
@@ -49,11 +49,9 @@ export async function useStatistics(stake: Ref<number> = ref(100), search: Ref<s
         offer.market.toLocaleLowerCase('it').includes(term),
     )
   })
-  const stats = computed(() =>
-    analyze(offers.value, stake.value, 'boosted', period.filters.value.from),
-  )
   const comparison = computed(() =>
     compareOdds(offers.value, stake.value, period.filters.value.from),
   )
+  const stats = computed(() => comparison.value.boosted)
   return { ...result, offers, stats, comparison, period }
 }

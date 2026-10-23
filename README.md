@@ -32,6 +32,11 @@ Le informazioni pubblicate descrivono lo storico delle superquote registrate nel
 
 Progetto di [Marco Rizzato](https://www.marcorizzato.it)
 
+## Verifiche di sviluppo
+
+`pnpm typecheck`,
+`pnpm format:check` e `pnpm build` verificano rispettivamente tipi, formattazione e build.
+
 ## Rendering e indicizzazione
 
 Le pagine pubbliche caricano i dati con SSR usando esclusivamente il client Supabase pubblico, senza sessioni amministrative. Non è necessario modificare RLS o aggiungere chiavi privilegiate. Un errore di lettura restituisce HTTP 503 invece di presentare una pagina vuota come disponibile.

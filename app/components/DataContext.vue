@@ -1,37 +1,7 @@
 <script setup lang="ts">
-const dialog = ref<HTMLDialogElement | null>(null)
+const { dialog, open, close, closeOnBackdrop } = useDialog()
 const route = useRoute()
-let previousOverflow: string | undefined
-function open() {
-  if (!dialog.value || dialog.value.open) return
-  previousOverflow = document.documentElement.style.overflow
-  dialog.value.showModal()
-  document.documentElement.style.overflow = 'hidden'
-}
-function restoreScroll() {
-  if (previousOverflow === undefined) return
-  document.documentElement.style.overflow = previousOverflow
-  previousOverflow = undefined
-}
-function closeOnBackdrop(event: MouseEvent) {
-  if (event.target !== dialog.value || !dialog.value) return
-  const rect = dialog.value.getBoundingClientRect()
-  if (
-    event.clientX < rect.left ||
-    event.clientX > rect.right ||
-    event.clientY < rect.top ||
-    event.clientY > rect.bottom
-  )
-    dialog.value.close()
-}
-watch(
-  () => route.fullPath,
-  () => dialog.value?.close(),
-)
-onBeforeUnmount(() => {
-  dialog.value?.close()
-  restoreScroll()
-})
+watch(() => route.fullPath, close)
 </script>
 
 <template>
@@ -47,7 +17,6 @@ onBeforeUnmount(() => {
     ref="dialog"
     aria-labelledby="data-context-title"
     class="m-auto w-full max-h-[calc(100dvh_-_32px)] max-w-[min(42rem,calc(100%_-_32px))] overflow-auto rounded-lg border border-panel-border bg-surface p-5 text-foreground shadow-2xl backdrop:bg-[#06140cba] backdrop:backdrop-blur-[4px] md:p-7"
-    @close="restoreScroll"
     @click="closeOnBackdrop"
   >
     <div class="flex items-start justify-between gap-4">
@@ -58,7 +27,7 @@ onBeforeUnmount(() => {
         type="button"
         autofocus
         class="shrink-0 rounded-md border border-action-border bg-action px-3 py-2 text-sm text-action-text hover:bg-action-hover"
-        @click="dialog?.close()"
+        @click="close"
       >
         Chiudi
       </button>
@@ -91,7 +60,7 @@ onBeforeUnmount(() => {
       </p>
 
       <nav
-        @click="dialog?.close()"
+        @click="close"
         aria-label="Approfondisci i dati"
         class="mt-4 flex flex-wrap gap-x-5 gap-y-3"
       >
