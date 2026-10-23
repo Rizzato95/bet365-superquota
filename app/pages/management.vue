@@ -18,9 +18,7 @@ const page = ref(1),
 const editorOpen = ref(false),
   editing = ref<Offer | null>(null),
   deleting = ref<Offer | null>(null),
-  busy = ref(false),
-  notice = ref(''),
-  operationError = ref('')
+  notice = ref('')
 const { filters } = usePeriod()
 const adminQuery = computed(() => ({
   ...filters.value,
@@ -34,7 +32,27 @@ const { data, status, error, execute } = await useFetch<OfferPage>('/api/admin/o
   immediate: false,
   watch: false,
 })
+const {
+  busy,
+  error: operationError,
+  remove,
+  restore,
+} = useOfferMutations({
+  onUnauthorized: handleExpiredSession,
+  onSuccess: (action) => {
+    deleting.value = null
+    notice.value =
+      action === 'restore'
+        ? 'Superquota ripristinata.'
+        : 'Superquota rimossa. Puoi recuperarla da “Rimosse”.'
+  },
+})
 let refreshingExpiredSession = false
+watch(data, (value) => {
+  if (!value) return
+  const lastPage = Math.max(1, Math.ceil(value.total / value.pageSize))
+  if (page.value > lastPage) page.value = lastPage
+})
 async function handleExpiredSession() {
   if (refreshingExpiredSession) return
   refreshingExpiredSession = true
@@ -49,22 +67,19 @@ async function handleExpiredSession() {
   }
 }
 watch(
-  session,
-  (value) => {
-    if (value?.admin) execute()
-  },
-  { immediate: true },
-)
-watch(
   [filters, search, outcome, removed],
   () => {
     page.value = 1
   },
   { flush: 'sync' },
 )
-watch(adminQuery, () => {
-  if (session.value?.admin) execute()
-})
+watch(
+  [() => session.value?.admin, adminQuery],
+  ([admin]) => {
+    if (admin) void execute()
+  },
+  { immediate: true },
+)
 watch(error, async (requestError) => {
   if (isUnauthorizedError(requestError)) await handleExpiredSession()
 })
@@ -78,7 +93,6 @@ async function login() {
     })
     password.value = ''
     await refreshSession()
-    if (session.value?.admin) await execute()
   } catch (error: any) {
     loginError.value = error.data?.statusMessage || 'Accesso non riuscito. Riprova.'
   } finally {
@@ -100,34 +114,9 @@ function edit(offer: Offer | null = null) {
   editorOpen.value = true
   notice.value = ''
 }
-async function saved() {
+function saved() {
   editorOpen.value = false
   notice.value = 'Superquota salvata. Statistiche aggiornate.'
-  await execute()
-}
-async function mutate(offer: Offer, restore = false) {
-  busy.value = true
-  operationError.value = ''
-  notice.value = ''
-  try {
-    if (restore) await $fetch(`/api/admin/offers/${offer.id}/restore`, { method: 'POST' })
-    else await $fetch(`/api/admin/offers/${offer.id}`, { method: 'DELETE' })
-    deleting.value = null
-    notice.value = restore
-      ? 'Superquota ripristinata.'
-      : 'Superquota rimossa. Puoi recuperarla da “Rimosse”.'
-    if (data.value?.offers.length === 1 && page.value > 1) page.value--
-    await refreshNuxtData()
-    await execute()
-  } catch (error: any) {
-    if (isUnauthorizedError(error)) {
-      await handleExpiredSession()
-      return
-    }
-    operationError.value = error.data?.statusMessage || 'Operazione non riuscita. Riprova.'
-  } finally {
-    busy.value = false
-  }
 }
 </script>
 <template>
@@ -242,7 +231,7 @@ async function mutate(offer: Offer, restore = false) {
       :removed="removed"
       @edit="edit"
       @remove="deleting = $event"
-      @restore="mutate($event, true)" /><PaginationBar
+      @restore="restore" /><PaginationBar
       v-if="data && data.total > 0"
       v-model="page"
       :total="data.total"
@@ -257,7 +246,7 @@ async function mutate(offer: Offer, restore = false) {
       :offer="deleting"
       :busy="busy"
       :error="operationError"
-      @confirm="mutate(deleting!)"
+      @confirm="remove(deleting!)"
       @cancel="deleting = null"
   /></template>
 </template>

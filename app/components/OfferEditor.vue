@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Offer, OfferInput } from '#shared/types/offer'
+import type { Offer } from '#shared/types/offer'
 import { sports, outcomes } from '#shared/types/offer'
 import { outcomeLabels } from '#shared/utils/format'
 import { offerSchema } from '#shared/utils/validation'
@@ -17,9 +17,14 @@ const form = reactive({
   boosted_odds: props.offer?.boosted_odds.toString() ?? '',
   outcome: props.offer?.outcome ?? 'pending',
 })
-const errors = ref<Record<string, string>>({}),
-  serverError = ref(''),
-  saving = ref(false)
+const errors = ref<Record<string, string>>({})
+const {
+  busy: saving,
+  error: serverError,
+  save: saveOffer,
+} = useOfferMutations({
+  onUnauthorized: () => emit('sessionExpired'),
+})
 const sportOptions = sports.map((value) => ({ value, label: value }))
 const outcomeOptions = outcomes.map((value) => ({ value, label: outcomeLabels[value] }))
 onMounted(() => dialog.value?.showModal())
@@ -36,23 +41,7 @@ async function save() {
     for (const issue of parsed.error.issues) errors.value[String(issue.path[0])] = issue.message
     return
   }
-  saving.value = true
-  try {
-    await $fetch(props.offer ? `/api/admin/offers/${props.offer.id}` : '/api/admin/offers', {
-      method: props.offer ? 'PATCH' : 'POST',
-      body: parsed.data as OfferInput,
-    })
-    await refreshNuxtData()
-    emit('saved')
-  } catch (error: any) {
-    if (isUnauthorizedError(error)) {
-      emit('sessionExpired')
-      return
-    }
-    serverError.value = error.data?.statusMessage || 'Salvataggio non riuscito. Riprova.'
-  } finally {
-    saving.value = false
-  }
+  if (await saveOffer(props.offer, parsed.data)) emit('saved')
 }
 </script>
 <template>
@@ -98,12 +87,8 @@ async function save() {
               errors.date
             }}</small></label
           ><label class="flex flex-col gap-2 text-xs text-label md:text-sm"
-            >Sport<AppSelect
-              v-model="form.sport"
-              variant="form"
-              :options="sportOptions"
-            /></label
-          >
+            >Sport<AppSelect v-model="form.sport" variant="form" :options="sportOptions"
+          /></label>
         </div>
         <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
           >Evento<input
@@ -156,12 +141,8 @@ async function save() {
           >
         </div>
         <label class="flex flex-col gap-2 text-xs text-label md:text-sm"
-          >Esito<AppSelect
-            v-model="form.outcome"
-            variant="form"
-            :options="outcomeOptions"
-          /></label
-        >
+          >Esito<AppSelect v-model="form.outcome" variant="form" :options="outcomeOptions"
+        /></label>
         <p
           v-if="serverError"
           class="px-3.5 py-3 mx-0 my-3.5 border border-alert-border text-error text-xs leading-relaxed rounded-lg bg-alert"

@@ -100,24 +100,11 @@ defineEmits<{ edit: [offer: Offer]; remove: [offer: Offer]; restore: [offer: Off
     </table>
   </div>
   <div class="grid gap-3.5 md:hidden md:gap-0">
-    <div v-for="offer in offers" :key="offer.id">
-      <OfferCard :offer="offer" />
-      <div v-if="admin"
-        class="px-3.5 py-3 border border-[#40553f] flex justify-between gap-3 bg-[#223329] rounded-lg -mt-1 md:inline md:justify-normal md:gap-0 md:pl-0 md:border-l-0">
-        <template v-if="!removed"><button
-            class="px-3 py-2 border border-action-border inline-flex items-center justify-center gap-2 min-h-9.5 rounded-lg text-xs font-medium transition-colors duration-150 bg-action text-action-text hover:bg-action-hover"
-            @click="$emit('edit', offer)">
-            <AppIcon name="edit" :size="15" />Modifica
-          </button><button
-            class="px-3 py-2 border border-action-border inline-flex items-center justify-center gap-2 min-h-9.5 rounded-lg text-xs font-medium transition-colors duration-150 bg-action text-negative hover:bg-action-hover"
-            @click="$emit('remove', offer)">
-            Rimuovi
-          </button></template><button v-else
-          class="px-3 py-2 border border-action-border inline-flex items-center justify-center gap-2 min-h-9.5 rounded-lg text-xs font-medium transition-colors duration-150 bg-action text-action-text hover:bg-action-hover"
-          @click="$emit('restore', offer)">
-          <AppIcon name="restore" :size="15" />Ripristina
-        </button>
-      </div>
-    </div>
+    <OfferCard
+      v-for="offer in offers"
+      :key="offer.id"
+      :offer="offer"
+      :removed="removed"
+    />
   </div>
 </template>

@@ -3,6 +3,7 @@ export function useAdmin() {
   const shouldFetchOnServer = useRoute().path.startsWith('/management')
   return useFetch<{ admin: boolean; email: string | null }>('/api/auth/session', {
     key: 'admin-session',
+    dedupe: 'defer',
     lazy: true,
     server: shouldFetchOnServer,
     async onResponse({ response }) {
