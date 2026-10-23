@@ -8,7 +8,8 @@ usePageSeo({
   path: '/simulator',
 })
 const stake = ref(100),
-  enteredStake = ref('100')
+  enteredStake = ref('100'),
+  search = ref('')
 const stakeError = computed(() => {
   const result = stakeSchema.safeParse(enteredStake.value.replace(',', '.'))
   return result.success ? '' : result.error.issues[0]!.message
@@ -17,7 +18,10 @@ watch(enteredStake, (value) => {
   const parsed = stakeSchema.safeParse(value.replace(',', '.'))
   if (parsed.success) stake.value = parsed.data
 })
-const { data, status, error, refresh, stats, comparison } = await useStatistics(stake)
+const { data, status, error, refresh, stats, comparison, offers } = await useStatistics(
+  stake,
+  search,
+)
 </script>
 <template>
   <div class="flex items-center justify-between mb-6 gap-2.5 md:mb-6.5 md:gap-5">
@@ -76,10 +80,20 @@ const { data, status, error, refresh, stats, comparison } = await useStatistics(
       >
     </div>
   </section>
+  <div class="flex items-center gap-3 flex-wrap mb-5.5">
+    <OfferSearch v-model="search" />
+    <SimulatorOffers
+      v-if="data && !error"
+      :offers="offers"
+      :stake="stake"
+      :loading="status === 'pending'"
+    />
+  </div>
   <DataState
-    v-if="error || !data"
+    v-if="error || !data || !offers.length"
     :error="!!error"
     :loading="status === 'pending'"
+    :empty="!!data && !offers.length"
     @retry="refresh()"
   />
   <div
